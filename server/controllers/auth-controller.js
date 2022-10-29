@@ -155,7 +155,8 @@ registerUser = async (req, res) => {
             user: {
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,  
-                email: savedUser.email              
+                email: savedUser.email
+                //token: savedUser._id              
             }
         })
 
