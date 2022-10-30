@@ -12,6 +12,7 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { Modal, Alert } from '@mui/material';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
@@ -31,6 +32,16 @@ export default function RegisterScreen() {
     return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                <Modal
+                    open={auth.accerrOpen}
+                    aria-labelledby="modal-north"
+                    aria-describedby="modal-center-content">
+                    <Box>
+                        <Typography component="h6" variant="h2">Error</Typography> 
+                        <Alert severity="warning">{auth.errMsg}</Alert>  
+                        <Button type="close" variant='text'>Close</Button>
+                    </Box>  
+                </Modal>
                 <Box
                     sx={{
                         marginTop: 8,
