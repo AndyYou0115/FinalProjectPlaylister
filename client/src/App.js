@@ -11,7 +11,6 @@ import {
     Statusbar,
     WorkspaceScreen
 } from './components'
-import { Modal } from '@mui/material';
 /*
     This is our application's top-level component.
     

@@ -18,7 +18,8 @@ function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        accErrModal: false
+        accErrModal: false,
+        errMsg: ""
     });
     const history = useHistory();
 
@@ -33,35 +34,40 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    accErrModal: false
+                    accErrModal: false,
+                    errMsg: ""
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    accErrModal: false
+                    accErrModal: false,
+                    errMsg: ""
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
                     loggedIn: false,
-                    accErrModal: false
+                    accErrModal: false,
+                    errMsg: ""
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    accErrModal: false
+                    accErrModal: false,
+                    errMsg: ""
                 })
             }
             case AuthActionType.ACC_ERR_MODAL: {
                 return setAuth({
                     user: auth.user,
                     loggedIn: false,
-                    accErrModal: payload
+                    accErrModal: payload[0],
+                    errMsg: payload[1]
                 })
             }
             default:
@@ -84,7 +90,7 @@ function AuthContextProvider(props) {
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
         const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
-        if (response.status === 200) {
+        if (response.data.success === true) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {
@@ -93,17 +99,14 @@ function AuthContextProvider(props) {
             })
             auth.loginUser(email, password);
         }
-        else if(response.status === 400) {
-            authReducer({
-                type: AuthActionType.ACC_ERR_MODAL,
-                payload: true
-            })
+        else if(response.data.success === false) {
+           auth.toggleAccErrModal(true, response.data.errorMessage);
         }
     }
 
     auth.loginUser = async function(email, password) {
         const response = await api.loginUser(email, password);
-        if (response.status === 200) {
+        if (response.data.success === true) {
             authReducer({
                 type: AuthActionType.LOGIN_USER,
                 payload: {
@@ -111,7 +114,10 @@ function AuthContextProvider(props) {
                 }
             })
             history.push("/");
+        } else if (response.data.success === false) {
+            auth.toggleAccErrModal(true, response.data.errorMessage);
         }
+
     }
 
     auth.logoutUser = async function() {
@@ -135,10 +141,10 @@ function AuthContextProvider(props) {
         return initials;
     }
 
-    auth.closeAccErrModal = function () {
+    auth.toggleAccErrModal = function (bool, msg) {
         authReducer({
             type: AuthActionType.ACC_ERR_MODAL,
-            payload : false
+            payload : [bool, msg]
         })
     }
 
