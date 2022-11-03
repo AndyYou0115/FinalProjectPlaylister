@@ -93,7 +93,7 @@ body {
   cursor: not-allowed;
 }
 
-#top5-list-selector {
+#playlist-selector {
   position: absolute;
   left: 0%;
   top: 10%;
@@ -111,7 +111,7 @@ body {
   background-color: var(--swatch-accent);
 }
 
-#top5-statusbar {
+#playlister-statusbar {
   position: absolute;
   left: 0%;
   top: 90%;
@@ -187,7 +187,7 @@ body {
 
 .list-card-button {
   float: right;
-  transform: scale(2);
+  font-size: 24pt;
 }
 
 #workspace-home,
@@ -350,7 +350,7 @@ input {
   grid-template-columns: 30% 65%;
   grid-template-rows: 33% 33% 33%;
   gap: 10px 20px;
-  font-size: 48pt;
+  font-size: 32pt;
 }
 
 .modal-control {

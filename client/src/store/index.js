@@ -76,7 +76,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -258,6 +258,7 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
+        history.push("/")
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -326,10 +327,11 @@ function GlobalStoreContextProvider(props) {
             }
         }
         processDelete(id);
+        store.hideModals();
     }
     store.deleteMarkedList = function() {
         store.deleteList(store.listIdMarkedForDeletion);
-        store.hideModals();
+        
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST

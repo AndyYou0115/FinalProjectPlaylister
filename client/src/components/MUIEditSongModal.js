@@ -9,7 +9,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 580,
+    height: 320,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -21,6 +22,12 @@ export default function MUIEditSongModal() {
     const [ title, setTitle ] = useState(store.currentSong.title);
     const [ artist, setArtist ] = useState(store.currentSong.artist);
     const [ youTubeId, setYouTubeId ] = useState(store.currentSong.youTubeId);
+    const CurrentModal = {
+        NONE : "NONE",
+        DELETE_LIST : "DELETE_LIST",
+        EDIT_SONG : "EDIT_SONG",
+        REMOVE_SONG : "REMOVE_SONG"
+    }
 
     function handleConfirmEditSong() {
         let newSongData = {
@@ -49,7 +56,7 @@ export default function MUIEditSongModal() {
 
     return (
         <Modal
-            open={store.listMarkedForDeletion !== null}
+            open={store.currentModal === CurrentModal.EDIT_SONG}
         >
             <Box sx={style}>
             <div
@@ -65,26 +72,29 @@ export default function MUIEditSongModal() {
                 <div
                     id="edit-song-modal-content"
                     className="modal-center">
-                    <div id="title-prompt" className="modal-prompt">Title:</div>
+                    <div id="title-prompt" className="modal-prompt" style={{fontSize:30, height:30, width:200}}>Title:</div>
                     <input 
                         id="edit-song-modal-title-textfield" 
                         className='modal-textfield' 
                         type="text" 
                         defaultValue={title} 
+                        style={{fontSize:30}}
                         onChange={handleUpdateTitle} />
-                    <div id="artist-prompt" className="modal-prompt">Artist:</div>
+                    <div id="artist-prompt" className="modal-prompt" style={{fontSize:30, height:30, width:200}}>Artist:</div>
                     <input 
                         id="edit-song-modal-artist-textfield" 
                         className='modal-textfield' 
                         type="text" 
                         defaultValue={artist} 
+                        style={{fontSize:30}}
                         onChange={handleUpdateArtist} />
-                    <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div>
+                    <div id="you-tube-id-prompt" className="modal-prompt" style={{fontSize:30, height:30, width:200}}>You Tube Id:</div>
                     <input 
                         id="edit-song-modal-youTubeId-textfield" 
                         className='modal-textfield' 
                         type="text" 
                         defaultValue={youTubeId} 
+                        style={{fontSize:32}}
                         onChange={handleUpdateYouTubeId} />
                 </div>
                 <div className="modal-south">

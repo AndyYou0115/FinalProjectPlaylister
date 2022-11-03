@@ -9,7 +9,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 800,
+    height: 270,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -18,6 +19,12 @@ const style = {
 
 export default function MUIRemoveSongModal() {
     const { store } = useContext(GlobalStoreContext);
+    const CurrentModal = {
+        NONE : "NONE",
+        DELETE_LIST : "DELETE_LIST",
+        EDIT_SONG : "EDIT_SONG",
+        REMOVE_SONG : "REMOVE_SONG"
+    }
 
     function handleConfirmRemoveSong () {
         store.addRemoveSongTransaction();
@@ -38,7 +45,7 @@ export default function MUIRemoveSongModal() {
 
     return (
         <Modal
-            open={store.listMarkedForDeletion !== null}
+            open={store.currentModal === CurrentModal.REMOVE_SONG}
         >
             <Box sx={style}>
             <div
