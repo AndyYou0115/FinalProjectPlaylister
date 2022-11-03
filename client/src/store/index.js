@@ -50,7 +50,7 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal : CurrentModal.NONE,
         idNamePairs: [],
-        currentList: null,
+        currentList: JSON.parse(window.localStorage.getItem('currentList')) || null,
         currentSongIndex : -1,
         currentSong : null,
         newListCounter: 0,
@@ -259,6 +259,7 @@ function GlobalStoreContextProvider(props) {
         });
         tps.clearAllTransactions();
         history.push("/")
+        window.localStorage.clear();    
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -327,11 +328,10 @@ function GlobalStoreContextProvider(props) {
             }
         }
         processDelete(id);
-        store.hideModals();
     }
     store.deleteMarkedList = function() {
         store.deleteList(store.listIdMarkedForDeletion);
-        
+        store.hideModals();
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
@@ -381,6 +381,7 @@ function GlobalStoreContextProvider(props) {
                         payload: playlist
                     });
                     history.push("/playlist/" + playlist._id);
+                    window.localStorage.setItem('currentList', JSON.stringify(playlist));
                 }
             }
         }
@@ -491,6 +492,7 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
                     payload: store.currentList
                 });
+                window.localStorage.setItem('currentList', JSON.stringify(store.currentList));
             }
         }
         asyncUpdateCurrentList();
