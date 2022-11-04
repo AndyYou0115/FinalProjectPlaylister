@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import jsTPS from '../common/jsTPS'
 import api from './store-request-api'
@@ -50,7 +50,7 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal : CurrentModal.NONE,
         idNamePairs: [],
-        currentList: JSON.parse(window.localStorage.getItem('currentList')) || null,
+        currentList: null,
         currentSongIndex : -1,
         currentSong : null,
         newListCounter: 0,
@@ -62,6 +62,14 @@ function GlobalStoreContextProvider(props) {
 
     console.log("inside useGlobalStore");
 
+    console.log(history.location.pathname.split("playlist/"))
+    useEffect(() => {
+        let id = history.location.pathname.split("playlist/");
+        if(id.length > 1) {
+            store.setCurrentList(id[1]); 
+        } 
+    }, [])
+    
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
     console.log("auth: " + auth);
@@ -332,6 +340,7 @@ function GlobalStoreContextProvider(props) {
     store.deleteMarkedList = function() {
         store.deleteList(store.listIdMarkedForDeletion);
         store.hideModals();
+        window.location.reload();
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
@@ -522,6 +531,10 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
         });
+    }
+
+    store.clearAllTransactions = function () {
+        tps.clearAllTransactions();
     }
 
     return (

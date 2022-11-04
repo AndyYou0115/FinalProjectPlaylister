@@ -15,6 +15,7 @@ import { GlobalStoreContext } from '../store/index.js'
 function WorkspaceScreen() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
+    let page;
     
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -23,7 +24,9 @@ function WorkspaceScreen() {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
-    return (
+
+    if(store.currentList) {
+        page = 
         <Box>
         <List 
             id="playlist-cards" 
@@ -42,6 +45,12 @@ function WorkspaceScreen() {
          </List>            
          { modalJSX }
          </Box>
+    } else {
+        page =<div></div>
+    }
+
+    return (
+        page
     )
 }
 

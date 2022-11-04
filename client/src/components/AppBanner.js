@@ -30,6 +30,7 @@ export default function AppBanner() {
 
     const handleLogout = () => {
         handleMenuClose();
+        store.closeCurrentList();
         auth.logoutUser();
     }
 
@@ -92,7 +93,8 @@ export default function AppBanner() {
     }
 
     function clearLocal () {
-        window.localStorage.clear();    
+        window.localStorage.clear();   
+        store.clearAllTransactions(); 
     }
 
     return (
