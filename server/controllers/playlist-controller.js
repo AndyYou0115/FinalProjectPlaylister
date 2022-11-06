@@ -24,26 +24,37 @@ createPlaylist = (req, res) => {
         return res.status(400).json({ success: false, error: err })
     }
 
-    User.findOne({ _id: req.userId }, (err, user) => {
-        console.log("user found: " + JSON.stringify(user));
-        user.playlists.push(playlist._id);
-        user
-            .save()
-            .then(() => {
-                playlist
-                    .save()
-                    .then(() => {
-                        return res.status(201).json({
-                            playlist: playlist
-                        })
-                    })
-                    .catch(error => {
-                        return res.status(400).json({
-                            errorMessage: 'Playlist Not Created!'
-                        })
-                    })
-            });
-    })
+    async function asyncFindUser(list) {
+        await User.findOne({ email: list.ownerEmail }, (err, user) => {
+            console.log("user._id: " + user._id);
+            console.log("req.userId: " + req.userId);
+            if (user._id == req.userId) {
+                console.log("correct user!");
+                    user.playlists.push(playlist._id);
+                    user
+                        .save()
+                        .then(() => {
+                            playlist
+                                .save()
+                                .then(() => {
+                                    return res.status(201).json({
+                                        playlist: playlist
+                                    })
+                                })
+                                .catch(error => {
+                                    return res.status(400).json({
+                                        errorMessage: 'Playlist Not Created!'
+                                    })
+                                })
+                        });
+            }
+            else {
+                console.log("incorrect user!");
+                return res.status(400).json({ success: false, description: "authentication error" });
+            }
+        });
+    }
+    asyncFindUser(playlist);
 }
 deletePlaylist = async (req, res) => {
     console.log("delete Playlist with id: " + JSON.stringify(req.params.id));
@@ -63,6 +74,9 @@ deletePlaylist = async (req, res) => {
                 console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
                     console.log("correct user!");
+                    //user.playlists.filter(list => list.toString() == req.params.id);
+                    //user.save();
+                    console.log("Playlist deleted");
                     Playlist.findOneAndDelete({ _id: req.params.id }, () => {
                         return res.status(200).json({});
                     }).catch(err => console.log(err))
@@ -98,7 +112,7 @@ getPlaylistById = async (req, res) => {
                 }
                 else {
                     console.log("incorrect user!");
-                    return res.status(200).json({ success: false, description: "Access denied: User email does not match playlist's owner email" });
+                    return res.status(400).json({ success: false, description: "authentication error" });
                 }
             });
         }
