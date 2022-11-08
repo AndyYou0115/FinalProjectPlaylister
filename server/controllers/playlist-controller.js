@@ -232,6 +232,6 @@ module.exports = {
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,
-    getPlaylists,
+    //getPlaylists,
     updatePlaylist
 }
