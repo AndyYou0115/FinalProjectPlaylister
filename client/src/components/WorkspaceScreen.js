@@ -46,7 +46,7 @@ function WorkspaceScreen() {
          { modalJSX }
          </Box>
     } else {
-        page =<div></div>
+        page =<div style={{fontSize: 40}}>Access denied: user email does not match owner email</div>
     }
 
     return (
