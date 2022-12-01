@@ -4,8 +4,12 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import { Accordion, AccordionDetails, AccordionSummary, Button } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -61,50 +65,53 @@ function ListCard(props) {
             toggleEdit();
         }
     }
+
     function handleUpdateText(event) {
         setText(event.target.value);
     }
 
-    let selectClass = "unselected-list-card";
-    if (selected) {
-        selectClass = "selected-list-card";
-    }
-    let cardStatus = false;
-    if (store.isListNameEditActive) {
-        cardStatus = true;
-    }
     let cardElement =
-        <ListItem
+        <Accordion
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '32pt', margin: '10px', padding: '20px', borderRadius: '25px', outline: '1px solid grey' }}
+            sx={{ display: 'flex', p: 1, flexWrap: 'wrap', bgcolor: '#ADD8E6', "&:hover":{ bgcolor: '#73A5C6' }, '&:before': {display: 'none'} }}
+            style={{ width: '95%', height: 117, fontSize: '32pt', margin: '10px', padding: '15px', borderRadius: '25px', outline: '1px solid grey' }}
             button
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}
+            elevation={0}
+            onDoubleClick={handleToggleEdit}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-            </Box>
-        </ListItem>
+            <AccordionSummary expandIcon={ <KeyboardDoubleArrowDownIcon sx={{ fontSize: 32, color: 'black' }}/> }>
+                <Box sx={{ p: 1 }}>{idNamePair.name}</Box>
+                <Button 
+                    aria-label="like"
+                    id="like-button"
+                    sx={{ color: "#000000", ml: 50, mr: 5}}
+                    startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                    //onClick={}
+                    >
+                    0
+                </Button>
+                <Button 
+                    aria-label="dislike"
+                    id="dislike-button"
+                    sx={{ color: "#000000", mr: 5 }}
+                    startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                    //onClick={}
+                    >
+                    0
+                </Button>
+                <Box sx={{ p: 1, fontSize: 15, mr: 40}}>By: </Box>
+                <Box sx={{ p: 1, fontSize: 15, mx: 2.5}}>Published: </Box>
+                <Box sx={{ p: 1, fontSize: 15, mr: 20}}>Listens:  </Box>
+            </AccordionSummary>    
+        </Accordion>
 
     if (editActive) {
         cardElement =
             <TextField
                 margin="normal"
                 required
-                fullWidth
+                width='100%'
                 id={"list-" + idNamePair._id}
                 label="Playlist Name"
                 name="name"
