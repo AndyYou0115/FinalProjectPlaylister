@@ -34,6 +34,11 @@ export default function AppBanner() {
         auth.logoutUser();
     }
 
+    const handleGuestLogIn = () => {
+        handleMenuClose();
+        auth.loginGuest();
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -53,6 +58,7 @@ export default function AppBanner() {
         >
             <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
+            <MenuItem onClick={handleGuestLogIn}><Link to='/'>Continue as Guest</Link></MenuItem>
         </Menu>
     );
     const loggedInMenu = 
@@ -76,8 +82,10 @@ export default function AppBanner() {
 
     let editToolbar = "";
     let menu = loggedOutMenu;
+    let logo = "";
     if (auth.loggedIn) {
         menu = loggedInMenu;
+        logo = "Playlister";
         if (store.currentList) {
             editToolbar = <EditToolbar />;
         }
@@ -99,15 +107,10 @@ export default function AppBanner() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" style={{ background: '#bfbfbf' }}>
                 <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
-                    >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/' onClick={clearLocal}>⌂</Link>
+                    <Typography style={{ color:'red', fontFamily: 'Oleo Script Swash Caps', fontSize: 40 }}>                        
+                        {logo} 
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}> 
@@ -119,6 +122,7 @@ export default function AppBanner() {
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
                             color="inherit"
+                            style={{ backgroundColor: 'red' }}
                         >
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>
