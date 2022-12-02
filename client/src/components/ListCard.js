@@ -4,12 +4,14 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
-import { Accordion, AccordionDetails, AccordionSummary, Button } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Paper } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import SongListCard from './SongListCard';
+import EditToolbar from './EditToolbar';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -22,7 +24,7 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
+    const { idNamePair } = props;
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -71,40 +73,59 @@ function ListCard(props) {
     }
 
     let cardElement =
-        <Accordion
+    <Paper 
+        id={idNamePair._id}
+        sx={{ margin: '10px', width: '95%', borderRadius: '5px' }}
+    > 
+        <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ display: 'flex', p: 1, flexWrap: 'wrap', bgcolor: '#ADD8E6', "&:hover":{ bgcolor: '#73A5C6' }, '&:before': {display: 'none'} }}
-            style={{ width: '95%', height: 117, fontSize: '32pt', margin: '10px', padding: '15px', borderRadius: '25px', outline: '1px solid grey' }}
+            sx={{ height: 85, p: 1, flexWrap: 'wrap', bgcolor: '#ADD8E6', "&:hover":{ bgcolor: '#ADD8E6' }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
             button
-            elevation={0}
             onDoubleClick={handleToggleEdit}
         >
-            <AccordionSummary expandIcon={ <KeyboardDoubleArrowDownIcon sx={{ fontSize: 32, color: 'black' }}/> }>
-                <Box sx={{ p: 1 }}>{idNamePair.name}</Box>
-                <Button 
-                    aria-label="like"
-                    id="like-button"
-                    sx={{ color: "#000000", ml: 50, mr: 5}}
-                    startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                    //onClick={}
-                    >
-                    0
-                </Button>
-                <Button 
-                    aria-label="dislike"
-                    id="dislike-button"
-                    sx={{ color: "#000000", mr: 5 }}
-                    startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                    //onClick={}
-                    >
-                    0
-                </Button>
-                <Box sx={{ p: 1, fontSize: 15, mr: 40}}>By: </Box>
-                <Box sx={{ p: 1, fontSize: 15, mx: 2.5}}>Published: </Box>
-                <Box sx={{ p: 1, fontSize: 15, mr: 20}}>Listens:  </Box>
-            </AccordionSummary>    
+            <Box sx={{ pr: 10, pl: 1, fontSize: 30 }}>{idNamePair.name}</Box>
+            <Button 
+                aria-label="like"
+                id="like-button"
+                sx={{ color: "#000000", ml: 50, mr: 5}}
+                startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                //onClick={}
+                >
+                0
+            </Button>
+            <Button 
+                aria-label="dislike"
+                id="dislike-button"
+                sx={{ color: "#000000", mr: 5 }}
+                startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                //onClick={}
+                >
+                0
+            </Button>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 15, mr: 40}}>By: </Box>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 15, mx: 2.5}}>Published: </Box>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 15, mr: 20}}>Listens:  </Box>
+        </ListItem>
+        <Accordion   
+            id={idNamePair._id}              
+            sx={{ bgcolor: '#ADD8E6', '&:before': {display: 'none'} }} 
+            elevation={0}
+            disableGutters
+        >
+            <AccordionSummary 
+                expandIcon={ 
+                    <KeyboardDoubleArrowDownIcon 
+                        style={{ fontSize: 32, color: 'black' }} 
+                        onClick={(event) => {handleLoadList(event, idNamePair._id)}}
+                    /> 
+                }/>
+            <AccordionDetails sx={{ maxHeight: 400, overflowY: 'auto' }}>
+                <SongListCard/>
+                <EditToolbar/>
+            </AccordionDetails>
         </Accordion>
+    </Paper>
 
     if (editActive) {
         cardElement =

@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
 
-import EditToolbar from './EditToolbar'
-
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -80,15 +78,11 @@ export default function AppBanner() {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
-    let editToolbar = "";
     let menu = loggedOutMenu;
     let logo = "";
     if (auth.loggedIn) {
         menu = loggedInMenu;
         logo = "Playlister";
-        if (store.currentList) {
-            editToolbar = <EditToolbar />;
-        }
     }
     
     function getAccountMenu(loggedIn) {
@@ -100,11 +94,6 @@ export default function AppBanner() {
             return <AccountCircle />;
     }
 
-    function clearLocal () {
-        window.localStorage.clear();   
-        store.clearAllTransactions(); 
-    }
-
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" style={{ background: '#bfbfbf' }}>
@@ -112,8 +101,7 @@ export default function AppBanner() {
                     <Typography style={{ color:'red', fontFamily: 'Oleo Script Swash Caps', fontSize: 40 }}>                        
                         {logo} 
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}> 
+                    <Box sx={{ display: { xs: 'none', md: 'flex', marginLeft: 'auto' } }}> 
                         <IconButton
                             size="large"
                             edge="end"

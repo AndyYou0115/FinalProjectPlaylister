@@ -389,7 +389,6 @@ function GlobalStoreContextProvider(props) {
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
-                    history.push("/playlist/" + playlist._id);
                     window.localStorage.setItem('currentList', JSON.stringify(playlist));
                 }
             }

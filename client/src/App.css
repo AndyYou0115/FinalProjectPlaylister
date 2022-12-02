@@ -114,6 +114,7 @@ body {
   width: 60%;
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #player-comment-tab {
@@ -125,6 +126,7 @@ body {
 .selected-list-card,
 .unselected-list-card {
   font-size: 18pt;
+  color: white;
   margin: 10px;
   padding: 20px;
   border-radius: 25px;
@@ -140,7 +142,7 @@ body {
 
 .unselected-list-card:hover {
   cursor: pointer;
-  background-color: var(--swatch-contrast);
+  background-color: #FFAE42;
   color: white;
 }
 
@@ -150,7 +152,7 @@ body {
 }
 
 .unselected-list-card {
-  background-color: var(--swatch-complement);
+  background-color: #528AAE;;
 }
 
 .list-card-button {
@@ -176,39 +178,8 @@ body {
   background-color: var(--swatch-primary);
 }
 
-.item-number,
-.top5-item,
-.top5-item-dragged-to {
-  display: flex;
-  align-items: center;
-  font-size: 48pt;
-  height: 20%;
-}
-
-.item-number {
-  justify-content: center;
-  width: 100%;
-  border: 1px 0px 1px 1px;
-  border-color: black;
-  background-color: linen;
-  color: black;
-}
-
 input {
   font-size: 20pt;
-}
-
-.top5-item,
-.top5-item-dragged-to {
-  text-align: left;
-  width: 95%;
-  padding-left: 5%;
-}
-.top5-item {
-  background-color: var(--swatch-complement);
-}
-.top5-item-dragged-to {
-  background-color: var(--swatch-accent);
 }
 
 .disabled {
