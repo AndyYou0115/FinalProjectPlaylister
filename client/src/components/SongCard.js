@@ -49,7 +49,7 @@ function SongCard(props) {
             key={index}
             id={'song-' + index + '-card'}
             className={cardClass}
-            style={{fontSize: '42px', outline: '1px solid grey'}}
+            style={{outline: '1px solid grey'}}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragEnter={handleDragEnter}
@@ -59,12 +59,7 @@ function SongCard(props) {
             onClick={handleClick}
         >
             {index + 1}.
-            <a
-                id={'song-' + index + '-link'}
-                className="song-link"
-                href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
-                {song.title} by {song.artist}
-            </a>
+            {song.title} by {song.artist}
             <input
                 type="button"
                 id={"remove-song-" + index}

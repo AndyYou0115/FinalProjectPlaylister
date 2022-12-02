@@ -2,7 +2,6 @@ import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Paper } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
@@ -10,8 +9,11 @@ import TextField from '@mui/material/TextField';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import PublishIcon from '@mui/icons-material/Publish';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import SongListCard from './SongListCard';
 import EditToolbar from './EditToolbar';
+import MUIDeleteModal from './MUIDeleteModal'
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -84,11 +86,11 @@ function ListCard(props) {
             button
             onDoubleClick={handleToggleEdit}
         >
-            <Box sx={{ pr: 10, pl: 1, fontSize: 30 }}>{idNamePair.name}</Box>
+            <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold' }}>{idNamePair.name}</Box>
             <Button 
                 aria-label="like"
                 id="like-button"
-                sx={{ color: "#000000", ml: 50, mr: 5}}
+                sx={{ color: "#000000", ml: 40, mr: 5}}
                 startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
                 //onClick={}
                 >
@@ -103,9 +105,9 @@ function ListCard(props) {
                 >
                 0
             </Button>
-            <Box sx={{ pr: 1, pl: 1, fontSize: 15, mr: 40}}>By: </Box>
-            <Box sx={{ pr: 1, pl: 1, fontSize: 15, mx: 2.5}}>Published: </Box>
-            <Box sx={{ pr: 1, pl: 1, fontSize: 15, mr: 20}}>Listens:  </Box>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 20, mr: 40}}>By: </Box>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 20, mx: 2.5}}>Published: </Box>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 20, mr: 20}}>Listens:  </Box>
         </ListItem>
         <Accordion   
             id={idNamePair._id}              
@@ -116,13 +118,29 @@ function ListCard(props) {
             <AccordionSummary 
                 expandIcon={ 
                     <KeyboardDoubleArrowDownIcon 
-                        style={{ fontSize: 32, color: 'black' }} 
+                        style={{ fontSize: 30, color: 'black' }} 
                         onClick={(event) => {handleLoadList(event, idNamePair._id)}}
                     /> 
                 }/>
             <AccordionDetails sx={{ maxHeight: 400, overflowY: 'auto' }}>
                 <SongListCard/>
                 <EditToolbar/>
+                <MUIDeleteModal/>
+                <IconButton 
+                    onClick={(event) => {handleDeleteList(event, idNamePair._id)}} 
+                    aria-label='delete'>
+                    <DeleteIcon style={{fontSize:'32pt'}} />
+                </IconButton>
+                <IconButton 
+                    //onClick={} 
+                    aria-label='publish'>
+                    <PublishIcon style={{fontSize:'32pt'}} />
+                </IconButton>
+                <IconButton 
+                    //onClick={} 
+                    aria-label='duplicate'>
+                    <FileCopyIcon style={{fontSize:'32pt'}} />
+                </IconButton>
             </AccordionDetails>
         </Accordion>
     </Paper>

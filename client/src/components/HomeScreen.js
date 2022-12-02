@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
-import MUIDeleteModal from './MUIDeleteModal'
 import { Button, TextField, Tabs, Tab, List} from '@mui/material';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
@@ -72,6 +71,16 @@ const HomeScreen = () => {
             </List>;
     }
 
+    let playerCommentTab =
+        <Tabs>
+            <Tab label="Player">
+
+            </Tab>
+            <Tab label="Comments">
+                
+            </Tab>
+        </Tabs>;
+
     return (
         <div id="homescreen">
             <div id="homescreen-heading">
@@ -125,10 +134,7 @@ const HomeScreen = () => {
                     {listCard}
                 </div>
                 <div id="player-comment-tab">
-                    <Tabs>
-                        <Tab label="Player"/>
-                        <Tab label="Comments"/>
-                    </Tabs>
+                    {playerCommentTab}
                 </div>
             </div>
         </div>
