@@ -3,7 +3,7 @@ import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Paper } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Paper, Link } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -105,7 +105,7 @@ function ListCard(props) {
                 >
                 0
             </Button>
-            <Box sx={{ pr: 1, pl: 1, fontSize: 20, mr: 40}}>By: </Box>
+            <Box sx={{ pr: 1, pl: 1, fontSize: 20, mr: 40}}>By: {<Link href="#">{idNamePair.owner}</Link>}</Box>
             <Box sx={{ pr: 1, pl: 1, fontSize: 20, mx: 2.5}}>Published: </Box>
             <Box sx={{ pr: 1, pl: 1, fontSize: 20, mr: 20}}>Listens:  </Box>
         </ListItem>

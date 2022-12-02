@@ -46,7 +46,7 @@ function SongListCard() {
             {modalJSX}
          </Box>            
     } else {
-        page =<div style={{fontSize: 40}}>Access denied: user email does not match owner email</div>
+        page =<div></div>
     }
 
     return (
