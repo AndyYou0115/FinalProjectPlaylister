@@ -68,7 +68,6 @@ const HomeScreen = () => {
                     <ListCard
                         key={pair._id}
                         idNamePair={pair}
-                        selected={false}
                     />
                 ))
             }

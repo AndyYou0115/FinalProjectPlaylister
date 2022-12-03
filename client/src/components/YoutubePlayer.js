@@ -10,68 +10,33 @@ import YouTube from 'react-youtube';
 const YoutubePlayer = () => {
     const { store } = useContext(GlobalStoreContext);
     const [currentSong, setCurrentSong] = useState(0);
- 
+    const [eventTarget, setEventTarget] = useState();
+    let playlistName="";
+    let title="";
+    let artist="";
+    let playlist=[];
 
-    // THIS WILL STORE OUR YOUTUBE PLAYER
-    //let player;
-    //let PLAYER_NAME = 'youtube_player';
-
-    // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = [
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-    ];
-
-    // // DYNAMICALLY LOAD THE YOUTUBE API FOR USE
-    // let tag = document.createElement('script');
-    // tag.src = "https://www.youtube.com/iframe_api";
-    // let firstScriptTag = document.getElementsByTagName('script')[0];
-    // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // // THE onYouTubeIframeAPIReady FUNCTION IS GLOBAL AND GETS CALLED
-    // // WHEN WHEN THE YOUTUBE API HAS BEEN LOADED AS A RESULT OF
-    // // OUR DYNAMICALLY LOADING INTO OUR PAGE'S SCRIPT
-    // function onYouTubeIframeAPIReady() {
-    //     // START OUR PLAYLIST AT THE BEGINNING
-    //     currentSong = 0;
-
-    //     // NOW MAKE OUR PLAYER WITH OUR DESIRED PROPERTIES
-    //     if (currentSong >= 0) {
-    //         player = new window.YT.Player(PLAYER_NAME, {
-    //             height: '390',
-    //             width: '640',
-    //             playerVars: {
-    //                 'playsinline': 1,
-    //                 'origin': "https://www.youtube.com"
-    //             },
-    //             events: {
-    //                 // NOTE OUR EVENT HANDLER FUNCTIONS HERE
-    //                 'onReady': onPlayerReady,
-    //                 'onStateChange': onPlayerStateChange
-    //             }
-    //         });
-    //     }
-    // }
+     if(store.currentList && store.currentList.songs) {
+         playlist = store.currentList.songs.map((song) => (song.youTubeId));
+         playlistName = store.currentList.name;
+         if(store.currentList.songs.length !== 0) {
+            title = store.currentList.songs[currentSong].title;
+            artist = store.currentList.songs[currentSong].artist;
+         }
+    }
 
     // THIS EVENT HANDLER GETS CALLED ONCE THE PLAYER IS CREATED
     function onPlayerReady(event) {
-        //loadAndPlayCurrentSong();
-        event.target.playVideo();
+        setEventTarget(event.target);
+        event.target.pauseVideo();
     }
-
-    // THIS FUNCTION LOADS THE CURRENT SONG INTO
-    // THE PLAYER AND PLAYS IT
-    // function loadAndPlayCurrentSong() {
-    //     let song = playlist[currentSong];
-    //     player.loadVideoById(song);
-    //     player.playVideo();
-    // }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        let i=currentSong+1;
-        setCurrentSong(i);
+        if(currentSong < store.currentList.songs.length-1) {
+            let i=currentSong+1;
+            setCurrentSong(i);
+        }
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -102,9 +67,21 @@ const YoutubePlayer = () => {
             // THE VIDEO HAS BEEN CUED
             console.log("5 Video cued");
         }
-        // if (color) {
-        //     document.getElementById(PLAYER_NAME).style.borderColor = color;
-        // }
+    }
+
+    function decSong() {
+        if(currentSong >= 1) {
+            let i = currentSong - 1;
+            setCurrentSong(i);
+        }
+    }
+
+    function handleStop() {
+        eventTarget.stopVideo();
+    }
+
+    function handlePlay() {
+        eventTarget.playVideo();
     }
 
     return(
@@ -128,10 +105,10 @@ const YoutubePlayer = () => {
                 id="player-info"
                 sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', bgcolor: '#ADD8E6' }}
             >
-                <Typography sx={{ pl: 1, pt: 1, fontWeight: 'bold' }}>Playlist:&#32;{ "" ?? store.currentList.name}</Typography> 
-                <Typography sx={{ pl: 1, fontWeight: 'bold' }}>Song&#32;#:&#32;{ "" ?? store.currentSongIndex}</Typography>  
-                <Typography sx={{ pl: 1, fontWeight: 'bold' }}>Title:&#32;{ "" ?? store.currentSong.title}</Typography>  
-                <Typography sx={{ pl: 1, fontWeight: 'bold' }}>Artist:&#32;{ "" ?? store.currentSong.artist}</Typography>
+                <Typography sx={{ pl: 1, pt: 1, fontWeight: 'bold' }}>Playlist:&#32;{playlistName}</Typography> 
+                <Typography sx={{ pl: 1, fontWeight: 'bold' }}>Song&#32;#:&#32;{currentSong}</Typography>  
+                <Typography sx={{ pl: 1, fontWeight: 'bold' }}>Title:&#32;{title}</Typography>  
+                <Typography sx={{ pl: 1, fontWeight: 'bold' }}>Artist:&#32;{artist}</Typography>
                 <Box 
                     display="flex" 
                     alignItems="center"
@@ -140,28 +117,28 @@ const YoutubePlayer = () => {
                     <IconButton
                         id='prev-song-button'
                         sx={{bgColor: 'transparent', mx: 1}}
-                        //onClick={handleAddNewSong}
+                        onClick={decSong}
                         variant="contained">
                         <FastRewindIcon sx={{ fontSize: 30 }}/>
                     </IconButton>
                     <IconButton 
                         id='stop-song-button'
                         sx={{bgColor: 'transparent', mx: 1}}
-                        //onClick={handleUndo}
+                        onClick={handleStop}
                         variant="contained">
                             <StopIcon sx={{ fontSize: 30 }}/>
                     </IconButton>
                     <IconButton 
                         id='play-song-button'
                         sx={{bgColor: 'transparent', mx: 1}}
-                        //onClick={handleRedo}
+                        onClick={handlePlay}
                         variant="contained">
                             <PlayArrowIcon sx={{ fontSize: 30 }}/>
                     </IconButton>
                     <IconButton 
                         id='next-song-button'
                         sx={{bgColor: 'transparent', mx: 1}}
-                        //onClick={handleClose}
+                        onClick={incSong}
                         variant="contained">
                             <FastForwardIcon sx={{ fontSize: 30 }}/>
                     </IconButton>
