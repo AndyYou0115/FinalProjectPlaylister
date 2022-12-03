@@ -1,17 +1,20 @@
 import { Box, Paper, Typography, IconButton } from '@mui/material'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import StopIcon from '@mui/icons-material/Stop';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import YouTube from 'react-youtube';
 
 const YoutubePlayer = () => {
     const { store } = useContext(GlobalStoreContext);
+    const [currentSong, setCurrentSong] = useState(0);
+ 
 
     // THIS WILL STORE OUR YOUTUBE PLAYER
-    let player;
-    let PLAYER_NAME = 'youtube_player';
+    //let player;
+    //let PLAYER_NAME = 'youtube_player';
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [
@@ -20,58 +23,55 @@ const YoutubePlayer = () => {
         "8UbNbor3OqQ"
     ];
 
-    // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let currentSong;
+    // // DYNAMICALLY LOAD THE YOUTUBE API FOR USE
+    // let tag = document.createElement('script');
+    // tag.src = "https://www.youtube.com/iframe_api";
+    // let firstScriptTag = document.getElementsByTagName('script')[0];
+    // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // DYNAMICALLY LOAD THE YOUTUBE API FOR USE
-    let tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    let firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // // THE onYouTubeIframeAPIReady FUNCTION IS GLOBAL AND GETS CALLED
+    // // WHEN WHEN THE YOUTUBE API HAS BEEN LOADED AS A RESULT OF
+    // // OUR DYNAMICALLY LOADING INTO OUR PAGE'S SCRIPT
+    // function onYouTubeIframeAPIReady() {
+    //     // START OUR PLAYLIST AT THE BEGINNING
+    //     currentSong = 0;
 
-    // THE onYouTubeIframeAPIReady FUNCTION IS GLOBAL AND GETS CALLED
-    // WHEN WHEN THE YOUTUBE API HAS BEEN LOADED AS A RESULT OF
-    // OUR DYNAMICALLY LOADING INTO OUR PAGE'S SCRIPT
-    function onYouTubeIframeAPIReady() {
-        // START OUR PLAYLIST AT THE BEGINNING
-        currentSong = 0;
-
-        // NOW MAKE OUR PLAYER WITH OUR DESIRED PROPERTIES
-        if (currentSong >= 0) {
-            player = new window.YT.Player(PLAYER_NAME, {
-                height: '390',
-                width: '640',
-                playerVars: {
-                    'playsinline': 1,
-                    'origin': "https://www.youtube.com"
-                },
-                events: {
-                    // NOTE OUR EVENT HANDLER FUNCTIONS HERE
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-    }
+    //     // NOW MAKE OUR PLAYER WITH OUR DESIRED PROPERTIES
+    //     if (currentSong >= 0) {
+    //         player = new window.YT.Player(PLAYER_NAME, {
+    //             height: '390',
+    //             width: '640',
+    //             playerVars: {
+    //                 'playsinline': 1,
+    //                 'origin': "https://www.youtube.com"
+    //             },
+    //             events: {
+    //                 // NOTE OUR EVENT HANDLER FUNCTIONS HERE
+    //                 'onReady': onPlayerReady,
+    //                 'onStateChange': onPlayerStateChange
+    //             }
+    //         });
+    //     }
+    // }
 
     // THIS EVENT HANDLER GETS CALLED ONCE THE PLAYER IS CREATED
     function onPlayerReady(event) {
-        loadAndPlayCurrentSong();
+        //loadAndPlayCurrentSong();
         event.target.playVideo();
     }
 
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
-    function loadAndPlayCurrentSong() {
-        let song = playlist[currentSong];
-        player.loadVideoById(song);
-        player.playVideo();
-    }
+    // function loadAndPlayCurrentSong() {
+    //     let song = playlist[currentSong];
+    //     player.loadVideoById(song);
+    //     player.playVideo();
+    // }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        currentSong++;
-        currentSong = currentSong % playlist.length;
+        let i=currentSong+1;
+        setCurrentSong(i);
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -79,43 +79,51 @@ const YoutubePlayer = () => {
     // VALUE TO REPRESENT THE TYPE OF STATE CHANGE. A playerStatus
     // VALUE OF 0 MEANS THE SONG PLAYING HAS ENDED.
     function onPlayerStateChange(event) {
-        let playerStatus = event.data;
-        let color;
+        let playerStatus = event.target.getPlayerState();
+
         if (playerStatus === -1) {
             // VIDEO UNSTARTED
-            color = "#37474F";
             console.log("-1 Video unstarted");
         } else if (playerStatus === 0) {
             // THE VIDEO HAS COMPLETED PLAYING
-            color = "#FFFF00";
             console.log("0 Video ended");
             incSong();
-            loadAndPlayCurrentSong();
+            //loadAndPlayCurrentSong();
         } else if (playerStatus === 1) {
             // THE VIDEO IS PLAYED
-            color = "#33691E";
             console.log("1 Video played");
         } else if (playerStatus === 2) {
             // THE VIDEO IS PAUSED
-            color = "#DD2C00";
             console.log("2 Video paused");
         } else if (playerStatus === 3) {
             // THE VIDEO IS BUFFERING
-            color = "#AA00FF";
             console.log("3 Video buffering");
         } else if (playerStatus === 5) {
             // THE VIDEO HAS BEEN CUED
-            color = "#FF6DOO";
             console.log("5 Video cued");
         }
-        if (color) {
-            document.getElementById(PLAYER_NAME).style.borderColor = color;
-        }
+        // if (color) {
+        //     document.getElementById(PLAYER_NAME).style.borderColor = color;
+        // }
     }
 
     return(
         <div>
-            <script src="../YouTubePlayer.js"></script>
+            <YouTube
+                key={playlist[currentSong]}
+                videoId={playlist[currentSong]}
+                opts = {{
+                    height: 290,
+                    width: '100%',
+                    playerVars: {
+                        playsinline: 1,
+                        autoplay: 1,
+                        origin: "https://www.youtube.com"
+                    }
+                }}
+                onReady={onPlayerReady}
+                onStateChange={onPlayerStateChange}
+            />
             <Paper
                 id="player-info"
                 sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', bgcolor: '#ADD8E6' }}
@@ -134,7 +142,7 @@ const YoutubePlayer = () => {
                         sx={{bgColor: 'transparent', mx: 1}}
                         //onClick={handleAddNewSong}
                         variant="contained">
-                        <FastForwardIcon sx={{ fontSize: 30 }}/>
+                        <FastRewindIcon sx={{ fontSize: 30 }}/>
                     </IconButton>
                     <IconButton 
                         id='stop-song-button'
