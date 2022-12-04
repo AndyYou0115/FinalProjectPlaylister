@@ -14,7 +14,7 @@ function Statusbar() {
     let content = <Typography variant="h4" style={{ fontSize: 20 }}> By: Andy You </Typography>;
 
     function handleCreateNewList() {
-        store.createNewList();
+        store.createNewList("", []);
     }
 
     if (auth.loggedIn) {

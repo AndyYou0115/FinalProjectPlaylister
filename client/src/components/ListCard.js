@@ -83,7 +83,11 @@ function ListCard(props) {
             store.addCommentLikeDislikeListen('none', 'none', false, true, false, idNamePair._id);
         }
     }
-    console.log(idNamePair.songs)
+
+    function handleDupe() {
+        store.createNewList(idNamePair.name, idNamePair.songs);
+    }
+    
     let cardElement =
     <Paper 
         id={idNamePair._id}
@@ -149,7 +153,7 @@ function ListCard(props) {
                     <PublishIcon style={{fontSize:'32pt'}} />
                 </IconButton>
                 <IconButton 
-                    //onClick={} 
+                    onClick={handleDupe} 
                     aria-label='duplicate'>
                     <FileCopyIcon style={{fontSize:'32pt'}} />
                 </IconButton>
