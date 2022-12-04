@@ -594,8 +594,6 @@ function GlobalStoreContextProvider(props) {
         async function asyncUpdateCurrentList() {
             let response = await api.updatePlaylistById(store.currentList._id, store.currentList);
             if (response.data.success) {
-                let playlist = response.data.playlist;
-                
                 async function asyncLoadIdNamePairs() {
                     let response;
                     if(store.searchMode === "h") {
@@ -618,7 +616,7 @@ function GlobalStoreContextProvider(props) {
         
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: {pairsArray: pairsArray, playlist: playlist}
+                        payload: {pairsArray: pairsArray, playlist: store.currentList}
                     });
                 }
                 asyncLoadIdNamePairs();
