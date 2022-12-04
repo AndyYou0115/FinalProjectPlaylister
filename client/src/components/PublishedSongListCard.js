@@ -22,7 +22,11 @@ function PublishedSongListCard(props) {
             >
                 {
                     songs.map((song, index) => (
-                        <Typography sx={{ pl: 1, py: 0.5, width: '100%', fontSize: 24, fontWeight: 'bold', bgcolor: '#528AAE', color: 'white' }}>
+                        <Typography 
+                            id={"published-song"+index}
+                            key={"published-song"+index}
+                            sx={{ pl: 1, py: 0.5, width: '100%', fontSize: 24, fontWeight: 'bold', bgcolor: '#528AAE', color: 'white' }}
+                        >
                             {index + 1}.
                             {song.title} by {song.artist}
                         </Typography>

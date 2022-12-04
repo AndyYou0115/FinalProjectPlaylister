@@ -92,6 +92,10 @@ function ListCard(props) {
     function handlePublish() {
         store.publishList(idNamePair._id);
     }
+
+    // function handleLoadUser() {
+    //     store.loadIdNamePair();
+    // }
     
     let cardElement;
     if(idNamePair.publishDate === "N/A") {
@@ -182,7 +186,7 @@ function ListCard(props) {
                     >
                     {idNamePair.dislikes}
                 </Button>
-                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#">{idNamePair.by}</Link>}</Box>
+                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#" >{idNamePair.by}</Link>}</Box>
                 <Box sx={{ fontSize: 20, width: '25%'}}>Published: {idNamePair.publishDate}</Box>
                 <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
             </ListItem>

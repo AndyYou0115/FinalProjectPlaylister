@@ -59,6 +59,8 @@ export const addCommentLikeDislikeListenById = (userName, comment, like, dislike
 export const publishPlaylistById = (id) => {
     return api.put(`/playlist/publish/${id}`)
 }
+export const getPlaylistPairsByName = (criteria, email) => api.get(`/playlistpairs/name/${criteria}/${email}`)
+export const getPlaylistPairsByUser = (criteria, email) => api.get(`/playlistpairs/user/${criteria}/${email}`)
 
 const apis = {
     createPlaylist,
@@ -67,7 +69,9 @@ const apis = {
     getPlaylistPairs,
     updatePlaylistById,
     addCommentLikeDislikeListenById,
-    publishPlaylistById
+    publishPlaylistById,
+    getPlaylistPairsByName,
+    getPlaylistPairsByUser
 }
 
 export default apis

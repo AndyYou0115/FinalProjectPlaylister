@@ -24,7 +24,7 @@ const HomeScreen = () => {
     const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        store.loadIdNamePairs(store.currentCri);
     }, [])
 
     const handleMenuOpen = (event) => {
@@ -109,6 +109,25 @@ const HomeScreen = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    function handleLoadListsByName() {
+        store.setSearchMode("n");
+    } 
+    
+    function handleLoadHome() {
+        store.setSearchMode("h");
+    } 
+
+    function handleLoadListsByUser() {
+        store.setSearchMode("u");
+    } 
+
+    function handleSearch(event) {
+        if(event.key === "Enter") {
+            let criteria = event.target.value;
+            store.loadIdNamePairs(criteria);
+        }
+    }
       
     let playerCommentTab =
         <Box sx={{ width: '100%' }}>
@@ -133,7 +152,7 @@ const HomeScreen = () => {
                     aria-label="home"
                     id="home-button"
                     style={{ color: "#000000" }}
-                    //onClick={}
+                    onClick={handleLoadHome}
                 >
                     <HomeOutlinedIcon style={{ fontSize: 50 }}/>
                 </Button>
@@ -141,7 +160,7 @@ const HomeScreen = () => {
                     aria-label="all-list"
                     id="all-list-button"
                     style={{ color: "#000000" }}
-                    //onClick={}
+                    onClick={handleLoadListsByName}
                 >
                     <PeopleAltOutlinedIcon style={{ fontSize: 50 }}/>
                 </Button>
@@ -149,7 +168,7 @@ const HomeScreen = () => {
                     aria-label="users"
                     id="users-button"
                     style={{ color: "#000000" }}
-                    //onClick={}
+                    onClick={handleLoadListsByUser}
                 >
                     <PersonOutlineOutlinedIcon style={{ fontSize: 50 }}/>
                 </Button>
@@ -158,7 +177,7 @@ const HomeScreen = () => {
                     label="Search" 
                     variant="outlined" 
                     sx={{ ml: 10, height: '95%', width: 700, backgroundColor: 'white'}}
-                    //onKeyPress={{}}
+                    onKeyPress={handleSearch}
                 /> 
                 <Button
                     size="large"
