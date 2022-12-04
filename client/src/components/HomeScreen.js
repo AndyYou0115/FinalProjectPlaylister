@@ -115,7 +115,7 @@ const HomeScreen = () => {
     } 
     
     function handleLoadHome() {
-        store.setSearchMode("h");
+        store.setHome();
     } 
 
     function handleLoadListsByUser() {

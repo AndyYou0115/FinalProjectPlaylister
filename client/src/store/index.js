@@ -30,7 +30,9 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    SET_SEARCH_MODE: "SET_SEARCH_MODE",
+    SET_HOME: "SET_HOME"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -254,6 +256,21 @@ function GlobalStoreContextProvider(props) {
                     currentCri: store.currentCri
                 });
             }
+            case GlobalStoreActionType.SET_HOME: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    searchMode: "h",
+                    currentCri: ""
+                });
+            }
             default:
                 return store;
         }
@@ -367,6 +384,20 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.SET_SEARCH_MODE,
             payload: type
         });
+    }
+    
+    store.setHome = function() {
+        async function asyncSetHome() {
+            let response = await api.getPlaylistPairs();
+            if(response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.SET_HOME,
+                    payload: pairsArray
+                });
+            }
+        }
+        asyncSetHome();
     }
 
     store.publishList = function(id) {
