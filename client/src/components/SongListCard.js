@@ -12,8 +12,9 @@ import MUIRemoveSongModal from './MUIRemoveSongModal'
     
     @author McKilla Gorilla
 */
-function SongListCard() {
+function SongListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { songs } = props;
     store.history = useHistory();
     let page;
 
@@ -25,7 +26,7 @@ function SongListCard() {
         modalJSX = <MUIRemoveSongModal />;
     }
 
-    if(store.currentList) {
+    //if(store.currentList) {
         page = 
         <Box>
             <List 
@@ -33,7 +34,7 @@ function SongListCard() {
                 sx={{ pd: 5, left: '2.5%', height: '100%', width: '95%', bgcolor: '#eeeeedd'  }}
             >
                 {
-                    store.currentList.songs.map((song, index) => (
+                    songs.map((song, index) => (
                         <SongCard
                             id={'playlist-song-' + (index)}
                             key={'playlist-song-' + (index)}
@@ -45,9 +46,9 @@ function SongListCard() {
             </List>
             {modalJSX}
          </Box>            
-    } else {
-        page =<div></div>
-    }
+    //} else {
+        //page =<div></div>
+   //}
 
     return (
         page

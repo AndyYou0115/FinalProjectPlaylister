@@ -38,7 +38,7 @@ function ListCard(props) {
             console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
+            store.addCommentLikeDislikeListen('none', 'none', false, false, true, id);
         }
     }
 
@@ -74,6 +74,16 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function handleLikeDislikeListen(event, type) {
+        event.stopPropagation();
+        if(type === 1) {
+            store.addCommentLikeDislikeListen('none', 'none', true, false, false, idNamePair._id);
+        }
+        else if(type === 2) {
+            store.addCommentLikeDislikeListen('none', 'none', false, true, false, idNamePair._id);
+        }
+    }
+    console.log(idNamePair.songs)
     let cardElement =
     <Paper 
         id={idNamePair._id}
@@ -91,8 +101,8 @@ function ListCard(props) {
                 aria-label="like"
                 id="like-button"
                 sx={{ color: "#000000", ml: 40, mr: 5}}
-                startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                //onClick={}
+                startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                onClick={(event) => handleLikeDislikeListen(event, 1)}
                 >
                 {idNamePair.likes}
             </Button>
@@ -100,8 +110,8 @@ function ListCard(props) {
                 aria-label="dislike"
                 id="dislike-button"
                 sx={{ color: "#000000", mr: 5 }}
-                startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                //onClick={}
+                startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                onClick={(event) => handleLikeDislikeListen(event, 2)}
                 >
                 {idNamePair.dislikes}
             </Button>
@@ -114,16 +124,18 @@ function ListCard(props) {
             sx={{ bgcolor: '#ADD8E6', '&:before': {display: 'none'} }} 
             elevation={0}
             disableGutters
+            onChange={(event, expanded) => { if(expanded) {handleLoadList(event, idNamePair._id)} }}
         >
             <AccordionSummary 
                 expandIcon={ 
                     <KeyboardDoubleArrowDownIcon 
                         style={{ fontSize: 30, color: 'black' }} 
-                        onClick={(event) => {handleLoadList(event, idNamePair._id)}}
                     /> 
                 }/>
             <AccordionDetails sx={{ maxHeight: 400, overflowY: 'auto' }}>
-                <SongListCard/>
+                <SongListCard
+                    songs={idNamePair.songs}
+                />
                 <EditToolbar/>
                 <MUIDeleteModal/>
                 <IconButton 

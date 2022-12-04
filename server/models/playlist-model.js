@@ -23,7 +23,8 @@ const playlistSchema = new Schema(
         comments: { type: [{
             by: String, 
             comment: String
-        }], required: true }
+        }], required: true },
+        likedDislikedUsers: {type: [String], required: true}
     },
     { timestamps: true },
 )

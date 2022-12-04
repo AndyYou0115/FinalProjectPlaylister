@@ -148,9 +148,11 @@ getPlaylistPairs = async (req, res) => {
                             owner: list.ownerEmail,
                             likes: list.likes,
                             dislikes: list.dislikes,
+                            songs: list.songs,
                             by: list.by,
                             publishDate: list.publishDate,
-                            listens: list.listens
+                            listens: list.listens,
+                            likedDislikedUsers: list.likedDislikedUsers
                         };
                         pairs.push(pair);
                     }
@@ -233,11 +235,66 @@ updatePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+addCommentLikeDislikeListenById = async (req, res) => {
+    const body = req.body
+    console.log("Adding comment/like/dislike")
+    console.log("req.body: " + req.body);
+
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a body to update',
+        })
+    }
+
+    Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
+        console.log("playlist found: " + JSON.stringify(playlist));
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'Playlist not found!',
+            })
+        }
+
+        if(body.userName !== "none" && body.comment !== "none") {
+            playlist.comments.push({by: body.userName, comment: body.comment});
+        }
+        if(body.listen) {
+            playlist.listens = playlist.listens + 1;
+        }
+        if(body.like && !playlist.likedDislikedUsers.includes(req.userId)) {
+            playlist.likes = playlist.likes + 1; 
+            playlist.likedDislikedUsers.push(req.userId);
+        }
+        else if(body.dislike && !playlist.likedDislikedUsers.includes(req.userId)) {
+            playlist.dislikes = playlist.dislikes + 1;
+            playlist.likedDislikedUsers.push(req.userId); 
+        }
+        playlist
+            .save()
+            .then(() => {
+                console.log("SUCCESS!!!");
+                return res.status(200).json({
+                    success: true,
+                    message: 'Playlist updated!',
+                })
+            })
+            .catch(error => {
+                console.log("FAILURE: " + JSON.stringify(error));
+                return res.status(404).json({
+                    error,
+                    message: 'Playlist not updated!',
+                })
+            })
+    })   
+}
+
 module.exports = {
     createPlaylist,
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,
     //getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    addCommentLikeDislikeListenById
 }

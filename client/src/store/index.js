@@ -126,7 +126,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -153,8 +153,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    idNamePairs: payload.pairsArray,
+                    currentList: payload.playlist,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -384,10 +384,20 @@ function GlobalStoreContextProvider(props) {
 
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
-                    storeReducer({
-                        type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: playlist
-                    });
+                    async function asyncLoadIdNamePairs() {
+                        response = await api.getPlaylistPairs();
+                        if (response.data.success) {
+                            let pairsArray = response.data.idNamePairs;
+                            storeReducer({
+                                type: GlobalStoreActionType.SET_CURRENT_LIST,
+                                payload: {pairsArray: pairsArray, playlist: playlist}
+                            });
+                        }
+                        else {
+                            console.log("API FAILED TO GET THE LIST PAIRS");
+                        }
+                    }
+                    asyncLoadIdNamePairs();
                     window.localStorage.setItem('currentList', JSON.stringify(playlist));
                 }
             }
@@ -397,6 +407,16 @@ function GlobalStoreContextProvider(props) {
 
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
+    }
+    store.addCommentLikeDislikeListen = function(userName, comment, like, dislike, listen, id) {
+        async function asyncAddComment() {
+            let response = await api.addCommentLikeDislikeListenById(userName, comment, like, dislike, listen, id);
+            if (response.data.success) {
+                store.setCurrentList(id); 
+                store.loadIdNamePairs();
+            }
+        }
+        asyncAddComment();
     }
     store.addNewSong = function() {
         let index = this.getPlaylistSize();
@@ -493,12 +513,22 @@ function GlobalStoreContextProvider(props) {
     }
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
-            const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            let response = await api.updatePlaylistById(store.currentList._id, store.currentList);
             if (response.data.success) {
-                storeReducer({
-                    type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: store.currentList
-                });
+                async function asyncLoadIdNamePairs() {
+                    response = await api.getPlaylistPairs();
+                    if (response.data.success) {
+                        let pairsArray = response.data.idNamePairs;
+                        storeReducer({
+                            type: GlobalStoreActionType.SET_CURRENT_LIST,
+                            payload: {pairsArray: pairsArray, playlist: store.currentList}
+                        });
+                    }
+                    else {
+                        console.log("API FAILED TO GET THE LIST PAIRS");
+                    }
+                }
+                asyncLoadIdNamePairs();
                 window.localStorage.setItem('currentList', JSON.stringify(store.currentList));
             }
         }
