@@ -277,7 +277,7 @@ function GlobalStoreContextProvider(props) {
             newListName = name + "*";
         }
         let userName = auth.user.firstName + " " + auth.user.lastName;
-        
+
         const response = await api.createPlaylist(newListName, songs, [], auth.user.email, userName);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
@@ -311,6 +311,17 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncLoadIdNamePairs();
+    }
+
+    store.publishList = function(id) {
+        console.log("ppp")
+        async function asyncPublishList() {
+            let response = await api.publishPlaylistById(id);
+            if (response.data.success) {
+                store.setCurrentList(id);
+            }
+        }
+        asyncPublishList();
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
@@ -417,7 +428,7 @@ function GlobalStoreContextProvider(props) {
             let response = await api.addCommentLikeDislikeListenById(userName, comment, like, dislike, listen, id);
             if (response.data.success) {
                 store.setCurrentList(id); 
-                store.loadIdNamePairs();
+                //store.loadIdNamePairs();
             }
         }
         asyncAddComment();

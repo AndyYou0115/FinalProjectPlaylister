@@ -14,6 +14,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import SongListCard from './SongListCard';
 import EditToolbar from './EditToolbar';
 import MUIDeleteModal from './MUIDeleteModal'
+import PublishedSongListCard from './PublishedSongListCard';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -87,79 +88,137 @@ function ListCard(props) {
     function handleDupe() {
         store.createNewList(idNamePair.name, idNamePair.songs);
     }
+
+    function handlePublish() {
+        store.publishList(idNamePair._id);
+    }
     
-    let cardElement =
-    <Paper 
-        id={idNamePair._id}
-        sx={{ margin: '10px', width: '95%', borderRadius: '5px' }}
-    > 
-        <ListItem
+    let cardElement;
+    if(idNamePair.publishDate === "N/A") {
+        cardElement =
+        <Paper 
             id={idNamePair._id}
-            key={idNamePair._id}
-            sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: '#ADD8E6', "&:hover":{ bgcolor: '#ADD8E6' }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
-            button
-            onDoubleClick={handleToggleEdit}
-        >
-            <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold' }}>{idNamePair.name}</Box>
-            <Button 
-                aria-label="like"
-                id="like-button"
-                sx={{ color: "#000000", ml: 40, mr: 5}}
-                startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                onClick={(event) => handleLikeDislikeListen(event, 1)}
-                >
-                {idNamePair.likes}
-            </Button>
-            <Button 
-                aria-label="dislike"
-                id="dislike-button"
-                sx={{ color: "#000000", mr: 5 }}
-                startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                onClick={(event) => handleLikeDislikeListen(event, 2)}
-                >
-                {idNamePair.dislikes}
-            </Button>
-            <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#">{idNamePair.by}</Link>}</Box>
-            <Box sx={{ fontSize: 20, width: '20%'}}>Published: {idNamePair.publishDate}</Box>
-            <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
-        </ListItem>
-        <Accordion   
-            id={idNamePair._id}              
-            sx={{ bgcolor: '#ADD8E6', '&:before': {display: 'none'} }} 
-            elevation={0}
-            disableGutters
-            onChange={(event, expanded) => { if(expanded) {handleLoadList(event, idNamePair._id)} }}
-        >
-            <AccordionSummary 
-                expandIcon={ 
-                    <KeyboardDoubleArrowDownIcon 
-                        style={{ fontSize: 30, color: 'black' }} 
-                    /> 
-                }/>
-            <AccordionDetails sx={{ maxHeight: 400, overflowY: 'auto' }}>
-                <SongListCard
-                    songs={idNamePair.songs}
-                />
-                <EditToolbar/>
-                <MUIDeleteModal/>
-                <IconButton 
-                    onClick={(event) => {handleDeleteList(event, idNamePair._id)}} 
-                    aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-                <IconButton 
-                    //onClick={} 
-                    aria-label='publish'>
-                    <PublishIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-                <IconButton 
-                    onClick={handleDupe} 
-                    aria-label='duplicate'>
-                    <FileCopyIcon style={{fontSize:'32pt'}} />
-                </IconButton>
-            </AccordionDetails>
-        </Accordion>
-    </Paper>
+            sx={{ margin: '10px', width: '95%', borderRadius: '5px' }}
+        > 
+            <ListItem
+                id={idNamePair._id}
+                key={idNamePair._id}
+                sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: '#ADD8E6', "&:hover":{ bgcolor: '#ADD8E6' }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
+                button
+                onDoubleClick={handleToggleEdit}
+            >
+                <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold', width: '100%' }}>{idNamePair.name}</Box>
+                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#">{idNamePair.by}</Link>}</Box>
+                <Box sx={{ fontSize: 20, width: '25%'}}>Published: {idNamePair.publishDate}</Box>
+                <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
+            </ListItem>
+            <Accordion   
+                id={idNamePair._id}              
+                sx={{ bgcolor: '#ADD8E6', '&:before': {display: 'none'} }} 
+                elevation={0}
+                disableGutters
+                onChange={(event, expanded) => { if(expanded) {handleLoadList(event, idNamePair._id)} }}
+            >
+                <AccordionSummary 
+                    expandIcon={ 
+                        <KeyboardDoubleArrowDownIcon 
+                            style={{ fontSize: 30, color: 'black' }} 
+                        /> 
+                    }/>
+                <AccordionDetails sx={{ maxHeight: 400, overflowY: 'auto' }}>
+                    <SongListCard
+                        songs={idNamePair.songs}
+                    />
+                    <EditToolbar/>
+                    <MUIDeleteModal/>
+                    <IconButton 
+                        onClick={(event) => {handleDeleteList(event, idNamePair._id)}} 
+                        aria-label='delete'>
+                        <DeleteIcon style={{fontSize:'32pt'}} />
+                    </IconButton>
+                    <IconButton 
+                        onClick={handlePublish} 
+                        aria-label='publish'>
+                        <PublishIcon style={{fontSize:'32pt'}} />
+                    </IconButton>
+                    <IconButton 
+                        onClick={handleDupe} 
+                        aria-label='duplicate'>
+                        <FileCopyIcon style={{fontSize:'32pt'}} />
+                    </IconButton>
+                </AccordionDetails>
+            </Accordion>
+        </Paper>
+    }
+    else {
+        cardElement =
+        <Paper 
+            id={idNamePair._id}
+            sx={{ margin: '10px', width: '95%', borderRadius: '5px' }}
+        > 
+            <ListItem
+                id={idNamePair._id}
+                key={idNamePair._id}
+                sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: '#FFAE42', "&:hover":{ bgcolor: '#FFAE42' }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
+                button
+                //onDoubleClick={handleToggleEdit}
+            >
+                <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold' }}>{idNamePair.name}</Box>
+                <Button 
+                    aria-label="like"
+                    id="like-button"
+                    sx={{ color: "#000000", ml: 40, mr: 5}}
+                    startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                    onClick={(event) => handleLikeDislikeListen(event, 1)}
+                    >
+                    {idNamePair.likes}
+                </Button>
+                <Button 
+                    aria-label="dislike"
+                    id="dislike-button"
+                    sx={{ color: "#000000", mr: 5 }}
+                    startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
+                    onClick={(event) => handleLikeDislikeListen(event, 2)}
+                    >
+                    {idNamePair.dislikes}
+                </Button>
+                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#">{idNamePair.by}</Link>}</Box>
+                <Box sx={{ fontSize: 20, width: '25%'}}>Published: {idNamePair.publishDate}</Box>
+                <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
+            </ListItem>
+            <Accordion   
+                id={idNamePair._id}              
+                sx={{ bgcolor: '#FFAE42', '&:before': {display: 'none'} }} 
+                elevation={0}
+                disableGutters
+                onChange={(event, expanded) => { if(expanded) {handleLoadList(event, idNamePair._id)} }}
+            >
+                <AccordionSummary 
+                    expandIcon={ 
+                        <KeyboardDoubleArrowDownIcon 
+                            style={{ fontSize: 30, color: 'black' }} 
+                        /> 
+                    }/>
+                <AccordionDetails sx={{ maxHeight: 400, overflowY: 'auto' }}>
+                    <PublishedSongListCard
+                        songs={idNamePair.songs}
+                        >
+                    </PublishedSongListCard>
+                    <MUIDeleteModal/>
+                    <IconButton 
+                        onClick={(event) => {handleDeleteList(event, idNamePair._id)}} 
+                        aria-label='delete'>
+                        <DeleteIcon style={{fontSize:'32pt'}} />
+                    </IconButton>
+                    <IconButton 
+                        onClick={handleDupe} 
+                        aria-label='duplicate'>
+                        <FileCopyIcon style={{fontSize:'32pt'}} />
+                    </IconButton>
+                </AccordionDetails>
+            </Accordion>
+        </Paper>;
+    }
 
     if (editActive) {
         cardElement =
