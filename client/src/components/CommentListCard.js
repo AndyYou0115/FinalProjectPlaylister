@@ -9,6 +9,18 @@ function CommentListCard() {
     const { auth } = useContext(AuthContext);
     let page;
 
+    let textfield;
+    if(!auth.guest) {
+        textfield =
+        <TextField 
+            id="outlined-basic" 
+            label="Add Comment" 
+            variant="outlined" 
+            sx={{ width: '100%', backgroundColor: 'white', mt: 1}}
+            onKeyPress={handleEnter}
+        />;
+    }
+
     function handleEnter(event) {
         if(event.key === "Enter") {
             let comment = event.target.value;
@@ -33,13 +45,7 @@ function CommentListCard() {
                         ))
                     }
                 </List>
-                <TextField 
-                    id="outlined-basic" 
-                    label="Add Comment" 
-                    variant="outlined" 
-                    sx={{ width: '100%', backgroundColor: 'white', mt: 1}}
-                    onKeyPress={handleEnter}
-                /> 
+                {textfield}
             </Box>
     } else {
         page =

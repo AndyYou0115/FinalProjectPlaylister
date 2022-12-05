@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import YoutubePlayer from './YoutubePlayer';
 import CommentListCard from './CommentListCard';
+import AuthContext from '../auth';
 
 /*
     This React component lists all the lists in the UI.
@@ -19,6 +20,7 @@ import CommentListCard from './CommentListCard';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [value, setValue] = useState(0);
     const isMenuOpen = Boolean(anchorEl);
@@ -145,17 +147,23 @@ const HomeScreen = () => {
             </TabPanel>
         </Box>;
 
+    let homeButton;
+    if(auth.user.email !== "guest"){
+        homeButton =
+        <Button 
+            aria-label="home"
+            id="home-button"
+            style={{ color: "#000000" }}
+            onClick={handleLoadHome}
+        >
+            <HomeOutlinedIcon style={{ fontSize: 50 }}/>
+        </Button>;
+    }
+
     return (
         <div id="homescreen">
             <div id="homescreen-heading">
-                <Button 
-                    aria-label="home"
-                    id="home-button"
-                    style={{ color: "#000000" }}
-                    onClick={handleLoadHome}
-                >
-                    <HomeOutlinedIcon style={{ fontSize: 50 }}/>
-                </Button>
+                {homeButton}
                 <Button 
                     aria-label="all-list"
                     id="all-list-button"

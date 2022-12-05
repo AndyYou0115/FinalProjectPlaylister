@@ -67,12 +67,12 @@ function GlobalStoreContextProvider(props) {
     console.log("inside useGlobalStore");
 
     console.log(history.location.pathname.split("playlist/"))
-    useEffect(() => {
-        let id = history.location.pathname.split("playlist/");
-        if(id.length > 1) {
-            store.setCurrentList(id[1]); 
-        } 
-    }, [])
+    // useEffect(() => {
+    //     let id = history.location.pathname.split("playlist/");
+    //     if(id.length > 1) {
+    //         store.setCurrentList(id[1]); 
+    //     } 
+    // }, [])
     
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
@@ -284,7 +284,7 @@ function GlobalStoreContextProvider(props) {
     store.changeListName = function (id, newName) {
         // GET THE LIST
         async function asyncChangeListName(id) {
-            let response = await api.getPlaylistById(id);
+            let response = await api.getPlaylistById(id, auth.user.email);
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 playlist.name = newName;
@@ -353,7 +353,11 @@ function GlobalStoreContextProvider(props) {
     store.loadIdNamePairs = function (criteria) {
         async function asyncLoadIdNamePairs() {
             let response;
-            if(store.searchMode === "h") {
+            console.log("email: " + auth.user.email)
+            if(auth.user.email === "guest" && store.searchMode === "h") {
+                response = await api.getAllPublishedPlaylistPairs();
+            }
+            else if(store.searchMode === "h") {
                 response = await api.getPlaylistPairs();
             } 
             else if(store.searchMode === "n") {
@@ -416,7 +420,7 @@ function GlobalStoreContextProvider(props) {
     // showDeleteListModal, and hideDeleteListModal
     store.markListForDeletion = function (id) {
         async function getListToDelete(id) {
-            let response = await api.getPlaylistById(id);
+            let response = await api.getPlaylistById(id, auth.user.email);
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 storeReducer({
@@ -479,13 +483,16 @@ function GlobalStoreContextProvider(props) {
     // moveItem, updateItem, updateCurrentList, undo, and redo
     store.setCurrentList = function (id) {
         async function asyncSetCurrentList(id) {
-            let response = await api.getPlaylistById(id);
+            let response = await api.getPlaylistById(id, auth.user.email);
             if (response.data.success) {
                 let playlist = response.data.playlist;
 
                 async function asyncLoadIdNamePairs() {
                     let response;
-                    if(store.searchMode === "h") {
+                    if(auth.user.email === "guest" && store.searchMode === "h") {
+                        response = await api.getAllPublishedPlaylistPairs();
+                    }
+                    else if(store.searchMode === "h") {
                         response = await api.getPlaylistPairs();
                     } 
                     else if(store.searchMode === "n") {
@@ -520,7 +527,7 @@ function GlobalStoreContextProvider(props) {
     }
     store.addCommentLikeDislikeListen = function(userName, comment, like, dislike, listen, id) {
         async function asyncAddComment() {
-            let response = await api.addCommentLikeDislikeListenById(userName, comment, like, dislike, listen, id);
+            let response = await api.addCommentLikeDislikeListenById(userName, comment, like, dislike, listen, id, auth.user.email);
             if (response.data.success) {
                 store.setCurrentList(id); 
                 //store.loadIdNamePairs();
@@ -627,7 +634,10 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 async function asyncLoadIdNamePairs() {
                     let response;
-                    if(store.searchMode === "h") {
+                    if(auth.user.email === "guest" && store.searchMode === "h") {
+                        response = await api.getAllPublishedPlaylistPair();
+                    }
+                    else if(store.searchMode === "h") {
                         response = await api.getPlaylistPairs();
                     } 
                     else if(store.searchMode === "n") {

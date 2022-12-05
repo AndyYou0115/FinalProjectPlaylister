@@ -36,7 +36,7 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    guest: auth.guest,
+                    guest: false,
                     accErrModal: false,
                     errMsg: ""
                 });
@@ -52,10 +52,10 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGIN_GUEST: {
                 return setAuth({
-                    user: {firstName: "G", lastName: "t"},
+                    user: {firstName: "G", lastName: "t", email: "guest"},
                     loggedIn: true,
                     guest: true,
-                    accErrModal: false,
+                    accErrModal: false, 
                     errMsg: ""
                 })
             }
@@ -139,7 +139,7 @@ function AuthContextProvider(props) {
     auth.loginGuest = async function () {
         authReducer({
             type: AuthActionType.LOGIN_GUEST,
-            payload: {}
+            payload: {}            
         });
         history.push("/");
     }

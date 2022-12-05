@@ -15,6 +15,7 @@ import SongListCard from './SongListCard';
 import EditToolbar from './EditToolbar';
 import MUIDeleteModal from './MUIDeleteModal'
 import PublishedSongListCard from './PublishedSongListCard';
+import AuthContext from '../auth';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -25,6 +26,7 @@ import PublishedSongListCard from './PublishedSongListCard';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair } = props;
@@ -96,6 +98,51 @@ function ListCard(props) {
     // function handleLoadUser() {
     //     store.loadIdNamePair();
     // }
+
+    let dislikeButton;
+    let likeButton;
+    let dupeButton;
+    let deleteButton;
+    if(!auth.guest) {
+        likeButton =
+        <Button 
+            aria-label="like"
+            id="like-button"
+            sx={{ color: "#000000", ml: 40, mr: 5}}
+            startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
+            onClick={(event) => handleLikeDislikeListen(event, 1)}
+        >
+            {idNamePair.likes}
+        </Button>;
+
+        dislikeButton =
+        <Button 
+            aria-label="dislike"
+            id="dislike-button"
+            sx={{ color: "#000000", mr: 5 }}
+            startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
+            onClick={(event) => handleLikeDislikeListen(event, 2)}
+        >
+            {idNamePair.dislikes}
+        </Button>;
+
+        dupeButton =
+        <IconButton 
+            onClick={handleDupe} 
+            aria-label='duplicate'>
+            <FileCopyIcon style={{fontSize:'32pt'}} />
+        </IconButton>;
+
+    }
+
+    if(auth.user.email === idNamePair.owner && !auth.guest) {
+        deleteButton = 
+        <IconButton 
+            onClick={(event) => {handleDeleteList(event, idNamePair._id)}} 
+            aria-label='delete'>
+            <DeleteIcon style={{fontSize:'32pt'}} />
+        </IconButton>;
+    }
     
     let cardElement;
     if(idNamePair.publishDate === "N/A") {
@@ -168,24 +215,8 @@ function ListCard(props) {
                 //onDoubleClick={handleToggleEdit}
             >
                 <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold' }}>{idNamePair.name}</Box>
-                <Button 
-                    aria-label="like"
-                    id="like-button"
-                    sx={{ color: "#000000", ml: 40, mr: 5}}
-                    startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                    onClick={(event) => handleLikeDislikeListen(event, 1)}
-                    >
-                    {idNamePair.likes}
-                </Button>
-                <Button 
-                    aria-label="dislike"
-                    id="dislike-button"
-                    sx={{ color: "#000000", mr: 5 }}
-                    startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
-                    onClick={(event) => handleLikeDislikeListen(event, 2)}
-                    >
-                    {idNamePair.dislikes}
-                </Button>
+                {likeButton}
+                {dislikeButton}
                 <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#" >{idNamePair.by}</Link>}</Box>
                 <Box sx={{ fontSize: 20, width: '25%'}}>Published: {idNamePair.publishDate}</Box>
                 <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
@@ -209,16 +240,8 @@ function ListCard(props) {
                         >
                     </PublishedSongListCard>
                     <MUIDeleteModal/>
-                    <IconButton 
-                        onClick={(event) => {handleDeleteList(event, idNamePair._id)}} 
-                        aria-label='delete'>
-                        <DeleteIcon style={{fontSize:'32pt'}} />
-                    </IconButton>
-                    <IconButton 
-                        onClick={handleDupe} 
-                        aria-label='duplicate'>
-                        <FileCopyIcon style={{fontSize:'32pt'}} />
-                    </IconButton>
+                    {deleteButton}
+                    {dupeButton}
                 </AccordionDetails>
             </Accordion>
         </Paper>;
