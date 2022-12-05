@@ -184,6 +184,7 @@ const HomeScreen = () => {
                     id="outlined-basic" 
                     label="Search" 
                     variant="outlined" 
+                    defaultValue='----->'
                     sx={{ ml: 10, height: '95%', width: 700, backgroundColor: 'white'}}
                     onKeyPress={handleSearch}
                 /> 
