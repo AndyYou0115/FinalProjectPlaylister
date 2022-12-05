@@ -143,6 +143,12 @@ function ListCard(props) {
             <DeleteIcon style={{fontSize:'32pt'}} />
         </IconButton>;
     }
+
+    function handleLoadUser(event) {
+        console.log("loaduser")
+        event.stopPropagation();
+        store.loadUser(auth.user.email, idNamePair.by);
+    }
     
     let cardElement;
     if(idNamePair.publishDate === "N/A") {
@@ -159,7 +165,15 @@ function ListCard(props) {
                 onDoubleClick={handleToggleEdit}
             >
                 <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold', width: '100%' }}>{idNamePair.name}</Box>
-                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#">{idNamePair.by}</Link>}</Box>
+                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: 
+                    {<Link  
+                        component='button'
+                        onClick={handleLoadUser}
+                        sx={{ fontSize: 20 }}
+                    >
+                        {idNamePair.by}
+                    </Link>}
+                </Box>
                 <Box sx={{ fontSize: 20, width: '25%'}}>Published: {idNamePair.publishDate}</Box>
                 <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
             </ListItem>
@@ -217,7 +231,15 @@ function ListCard(props) {
                 <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold' }}>{idNamePair.name}</Box>
                 {likeButton}
                 {dislikeButton}
-                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: {<Link href="#" >{idNamePair.by}</Link>}</Box>
+                <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: 
+                    {<Link  
+                        component='button'
+                        onClick={handleLoadUser}
+                        sx={{ fontSize: 20 }}
+                    >
+                        {idNamePair.by}
+                    </Link>}
+                </Box>
                 <Box sx={{ fontSize: 20, width: '25%'}}>Published: {idNamePair.publishDate}</Box>
                 <Box sx={{ fontSize: 20, width: '15%'}}>Listens: {idNamePair.listens}</Box>
             </ListItem>

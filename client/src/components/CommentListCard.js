@@ -37,9 +37,10 @@ function CommentListCard() {
                     sx={{ pd: 5, mr: 1, height: '100%', width: '100%', bgcolor: '#eeeeedd', overflowY: 'auto', overflowX: 'hidden' }}
                 >
                     {
-                        store.currentList.comments.map((comment) => (
+                        store.currentList.comments.map((comment, index) => (
                             <CommentCard
-                                id='playlist-comment'
+                                id={'playlist-comment'+index}
+                                key={'playlist-comment'+index}
                                 comment={comment}
                             />
                         ))

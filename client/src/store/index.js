@@ -32,7 +32,8 @@ export const GlobalStoreActionType = {
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
     SET_SEARCH_MODE: "SET_SEARCH_MODE",
-    SET_HOME: "SET_HOME"
+    SET_HOME: "SET_HOME",
+    LOAD_USER: "LOAD_USER"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -271,6 +272,21 @@ function GlobalStoreContextProvider(props) {
                     currentCri: ""
                 });
             }
+            case GlobalStoreActionType.LOAD_USER: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload.pairsArray,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    searchMode: "u",
+                    currentCri: payload.criteria
+                });
+            }
             default:
                 return store;
         }
@@ -353,7 +369,6 @@ function GlobalStoreContextProvider(props) {
     store.loadIdNamePairs = function (criteria) {
         async function asyncLoadIdNamePairs() {
             let response;
-            console.log("email: " + auth.user.email)
             if(auth.user.email === "guest" && store.searchMode === "h") {
                 response = await api.getAllPublishedPlaylistPairs();
             }
@@ -402,6 +417,26 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncSetHome();
+    }
+
+    store.loadUser = function(email, by) {
+        console.log(email+" "+by)
+        async function asyncLoadIdNamePairs() {
+            let response = await api.getPlaylistPairsByUser(by, email);
+            let pairsArray;
+            if (response.data.success) {
+                pairsArray = response.data.idNamePairs;
+            }
+            else {
+                pairsArray = [];
+            }
+
+            storeReducer({
+                type: GlobalStoreActionType.LOAD_USER,
+                payload: {criteria: by, pairsArray: pairsArray}
+            });
+        }
+        asyncLoadIdNamePairs();
     }
 
     store.publishList = function(id) {
@@ -529,8 +564,44 @@ function GlobalStoreContextProvider(props) {
         async function asyncAddComment() {
             let response = await api.addCommentLikeDislikeListenById(userName, comment, like, dislike, listen, id, auth.user.email);
             if (response.data.success) {
-                store.setCurrentList(id); 
-                //store.loadIdNamePairs();
+                async function asyncSetCurrentList(id) {
+                    let response = await api.getPlaylistById(id, auth.user.email);
+                    if (response.data.success) {
+                        let playlist = response.data.playlist;
+        
+                        async function asyncLoadIdNamePairs() {
+                            let response;
+                            if(auth.user.email === "guest" && store.searchMode === "h") {
+                                response = await api.getAllPublishedPlaylistPairs();
+                            }
+                            else if(store.searchMode === "h") {
+                                response = await api.getPlaylistPairs();
+                            } 
+                            else if(store.searchMode === "n") {
+                                response = await api.getPlaylistPairsByName(store.currentCri, auth.user.email);
+                            } 
+                            else if(store.searchMode === "u") {
+                                response = await api.getPlaylistPairsByUser(store.currentCri, auth.user.email);
+                            }
+                
+                            let pairsArray;
+                            if (response.data.success) {
+                                pairsArray = response.data.idNamePairs;
+                            }
+                            else {
+                                pairsArray = [];
+                            }
+                
+                            storeReducer({
+                                type: GlobalStoreActionType.SET_CURRENT_LIST,
+                                payload: {pairsArray: pairsArray, playlist: playlist}
+                            });
+                        }
+                        asyncLoadIdNamePairs();
+                        window.localStorage.setItem('currentList', JSON.stringify(playlist));
+                    }
+                }
+                asyncSetCurrentList(id);
             }
         }
         asyncAddComment();

@@ -40,6 +40,9 @@ function Statusbar() {
                 <Typography variant="h4" style={{ fontSize: 20 }}> {store.currentList.name} </Typography>;
             </Button>
     }
+    if(auth.guest) {
+        content="";
+    }
 
     return (
         <div id="playlister-statusbar">
