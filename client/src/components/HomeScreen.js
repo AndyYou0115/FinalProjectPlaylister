@@ -26,7 +26,7 @@ const HomeScreen = () => {
     const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
-        store.loadIdNamePairs(store.currentCri);
+        store.loadIdNamePairs(store.currentCri, store.sortType);
     }, [])
 
     const handleMenuOpen = (event) => {
@@ -36,6 +36,11 @@ const HomeScreen = () => {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    function handleSort(type) {
+        handleMenuClose();
+        store.sort(type);
+    }
 
     const menu = (
         <Menu
@@ -53,11 +58,13 @@ const HomeScreen = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Name &#40;A - Z&#41;</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Publish Date &#40;Newest&#41;</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Listens &#40;High - Low&#41;</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Likes &#40;High - Low&#41;</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Dislikes &#40;High - Low&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("name")}}>Name &#40;A - Z&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("publish")}}>Publish Date &#40;Newest&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("listen")}}>Listens &#40;High - Low&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("like")}}>Likes &#40;High - Low&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("dislike")}}>Dislikes &#40;High - Low&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("creation")}}>Creation Date &#40;Old - New&#41;</MenuItem>
+            <MenuItem onClick={() => {handleSort("edit")}}>Last Edit Date &#40;Old - New&#41;</MenuItem>
         </Menu>
     );
 
@@ -127,7 +134,7 @@ const HomeScreen = () => {
     function handleSearch(event) {
         if(event.key === "Enter") {
             let criteria = event.target.value;
-            store.loadIdNamePairs(criteria);
+            store.loadIdNamePairs(criteria, store.sortType);
         }
     }
       
