@@ -154,7 +154,15 @@ const HomeScreen = () => {
             </TabPanel>
         </Box>;
 
-    let homeButton;
+    let homeButton =
+    <Button 
+        aria-label="home"
+        id="home-button"
+        style={{ color: "#000000" }}
+        onClick={handleLoadHome}
+    >
+        <HomeOutlinedIcon style={{ fontSize: 50 }}/>
+    </Button>;
     if(auth.user.email !== "guest"){
         homeButton =
         <Button 
@@ -162,6 +170,7 @@ const HomeScreen = () => {
             id="home-button"
             style={{ color: "#000000" }}
             onClick={handleLoadHome}
+            disabled
         >
             <HomeOutlinedIcon style={{ fontSize: 50 }}/>
         </Button>;

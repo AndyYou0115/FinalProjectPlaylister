@@ -160,11 +160,11 @@ getPlaylistPairs = async (req, res) => {
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
-                        playlists.sort((a, b) => new Date(a.createdAt) <= new Date(b.createdAt))
+                        playlists.sort((a, b) => new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime())
                         console.log("sort by create")
                     }
                     else if(sort === "edit") {
-                        playlists.sort((a, b) => new Date(a.updatedAt) <= new Date(b.updatedAt))
+                        playlists.sort((a, b) => new Date(a.updatedAt).getTime() <= new Date(b.updatedAt).getTime())
                         console.log("sort by edit")
                     }
 
@@ -206,7 +206,6 @@ getPlaylists = async (req, res) => {
             else {
                 console.log("Send the Playlist pairs");
                 // PUT ALL THE LISTS INTO ID, NAME PAIRS
-                console.log(playlists[0].listens)
                 if(sort === "name") {
                     playlists.sort((a, b) => a.name.localeCompare(b.name));
                     console.log("sort by name")
@@ -228,11 +227,11 @@ getPlaylists = async (req, res) => {
                     console.log("sort by dislike")
                 }
                 else if(sort === "creation") {
-                    playlists.sort((a, b) => new Date(a.createdAt) <= new Date(b.createdAt))
+                    playlists.sort((a, b) => new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime())
                     console.log("sort by create")
                 }
                 else if(sort === "edit") {
-                    playlists.sort((a, b) => new Date(a.updatedAt) <= new Date(b.updatedAt))
+                    playlists.sort((a, b) => new Date(a.updatedAt).getTime() <= new Date(b.updatedAt).getTime())
                     console.log("sort by edit")
                 }
 
@@ -467,11 +466,11 @@ getPlaylistPairsByName = async (req, res) => {
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
-                        playlists.sort((a, b) => new Date(a.createdAt) <= new Date(b.createdAt))
+                        playlists.sort((a, b) => new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime())
                         console.log("sort by create")
                     }
                     else if(sort === "edit") {
-                        playlists.sort((a, b) => new Date(a.updatedAt) <= new Date(b.updatedAt))
+                        playlists.sort((a, b) => new Date(a.updatedAt).getTime() <= new Date(b.updatedAt).getTime())
                         console.log("sort by edit")
                     }
 
@@ -545,11 +544,11 @@ getPlaylistPairsByUser = async (req, res) => {
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
-                        playlists.sort((a, b) => new Date(a.createdAt) <= new Date(b.createdAt))
+                        playlists.sort((a, b) => new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime())
                         console.log("sort by create")
                     }
                     else if(sort === "edit") {
-                        playlists.sort((a, b) => new Date(a.updatedAt) <= new Date(b.updatedAt))
+                        playlists.sort((a, b) => new Date(a.updatedAt).getTime() <= new Date(b.updatedAt).getTime())
                         console.log("sort by edit")
                     }
                     let pairs = [];
@@ -618,11 +617,11 @@ getAllPublishedPlaylistPairs = async (req, res) => {
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
-                        playlists.sort((a, b) => new Date(a.createdAt) <= new Date(b.createdAt))
+                        playlists.sort((a, b) => new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime())
                         console.log("sort by create")
                     }
                     else if(sort === "edit") {
-                        playlists.sort((a, b) => new Date(a.updatedAt) <= new Date(b.updatedAt))
+                        playlists.sort((a, b) => new Date(a.updatedAt).getTime() <= new Date(b.updatedAt).getTime())
                         console.log("sort by edit")
                     }
 
