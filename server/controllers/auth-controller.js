@@ -21,7 +21,8 @@ getLoggedIn = async (req, res) => {
             user: {
                 firstName: loggedInUser.firstName,
                 lastName: loggedInUser.lastName,
-                email: loggedInUser.email
+                email: loggedInUser.email,
+                userName: loggedInUser.userName
             }
         })
     } catch (err) {
@@ -80,7 +81,8 @@ loginUser = async (req, res) => {
             user: {
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,  
-                email: existingUser.email              
+                email: existingUser.email,
+                userName: existingUser.userName              
             }
         })
 
@@ -101,9 +103,9 @@ logoutUser = async (req, res) => {
 
 registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, passwordVerify } = req.body;
-        console.log("create user: " + firstName + " " + lastName + " " + email + " " + password + " " + passwordVerify);
-        if (!firstName || !lastName || !email || !password || !passwordVerify) {
+        const { firstName, lastName, email, password, passwordVerify, userName } = req.body;
+        console.log("create user: " + firstName + " " + lastName + " " + email + " " + password + " " + passwordVerify + " " + userName);
+        if (!firstName || !lastName || !email || !password || !passwordVerify || !userName) {
             return res
                 .status(200)
                 .json({ 
@@ -130,7 +132,7 @@ registerUser = async (req, res) => {
                 })
         }
         console.log("password and password verify match");
-        const existingUser = await User.findOne({ email: email });
+        let existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
         if (existingUser) {
             return res
@@ -140,6 +142,16 @@ registerUser = async (req, res) => {
                     errorMessage: "An account with this email address already exists."
                 })
         }
+        existingUser = await User.findOne({ userName: userName });
+        console.log("existingUser: " + existingUser);
+        if (existingUser) {
+            return res
+                .status(200)
+                .json({
+                    success: false,
+                    errorMessage: "An account with this user name already exists."
+                })
+        }
 
         const saltRounds = 10;
         const salt = await bcrypt.genSalt(saltRounds);
@@ -147,7 +159,7 @@ registerUser = async (req, res) => {
         console.log("passwordHash: " + passwordHash);
 
         const newUser = new User({
-            firstName, lastName, email, passwordHash
+            firstName, lastName, email, passwordHash, userName
         });
         const savedUser = await newUser.save();
         console.log("new user saved: " + savedUser._id);
@@ -165,7 +177,8 @@ registerUser = async (req, res) => {
             user: {
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,  
-                email: savedUser.email
+                email: savedUser.email,
+                userName: savedUser.userName
                 //token: savedUser._id              
             }
         })

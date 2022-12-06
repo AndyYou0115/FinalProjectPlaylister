@@ -360,7 +360,7 @@ function GlobalStoreContextProvider(props) {
         if(name !== "") {
             newListName = name + "*";
         }
-        let userName = auth.user.firstName + " " + auth.user.lastName;
+        let userName = auth.user.userName;
 
         const response = await api.createPlaylist(newListName, songs, [], auth.user.email, userName);
         console.log("createNewList response: " + response);

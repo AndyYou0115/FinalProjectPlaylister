@@ -163,7 +163,7 @@ const HomeScreen = () => {
     >
         <HomeOutlinedIcon style={{ fontSize: 50 }}/>
     </Button>;
-    if(auth.user.email !== "guest"){
+    if(auth.user.email === "guest"){
         homeButton =
         <Button 
             aria-label="home"
