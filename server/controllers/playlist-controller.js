@@ -148,15 +148,15 @@ getPlaylistPairs = async (req, res) => {
                         console.log("sort by pub")
                     }
                     else if(sort === "listen") {
-                        playlists.sort((a, b) => parseInt(a.listens) >= parseInt(b.listens))
+                        playlists.sort((a, b) => parseInt(b.listens) - parseInt(a.listens))
                         console.log("sort by lis")
                     }
                     else if(sort === "like") {
-                        playlists.sort((a, b) => parseInt(a.likes) >= parseInt(b.likes))
+                        playlists.sort((a, b) => parseInt(b.likes) - parseInt(a.likes))
                         console.log("sort by like")
                     }
                     else if(sort === "dislike") {
-                        playlists.sort((a, b) => parseInt(a.dislikes) >= parseInt(b.dislikes))
+                        playlists.sort((a, b) => parseInt(b.dislikes) - parseInt(a.dislikes))
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
@@ -215,15 +215,15 @@ getPlaylists = async (req, res) => {
                     console.log("sort by pub")
                 }
                 else if(sort === "listen") {
-                    playlists.sort((a, b) => parseInt(a.listens) >= parseInt(b.listens))
+                    playlists.sort((a, b) => parseInt(b.listens) - parseInt(a.listens))
                     console.log("sort by lis")
                 }
                 else if(sort === "like") {
-                    playlists.sort((a, b) => parseInt(a.likes) >= parseInt(b.likes))
+                    playlists.sort((a, b) => parseInt(b.likes) - parseInt(a.likes))
                     console.log("sort by like")
                 }
                 else if(sort === "dislike") {
-                    playlists.sort((a, b) => parseInt(a.dislikes) >= parseInt(b.dislikes))
+                    playlists.sort((a, b) => parseInt(b.dislikes) - parseInt(a.dislikes))
                     console.log("sort by dislike")
                 }
                 else if(sort === "creation") {
@@ -454,15 +454,15 @@ getPlaylistPairsByName = async (req, res) => {
                         console.log("sort by pub")
                     }
                     else if(sort === "listen") {
-                        playlists.sort((a, b) => parseInt(a.listens) >= parseInt(b.listens))
+                        playlists.sort((a, b) => parseInt(b.listens) - parseInt(a.listens))
                         console.log("sort by lis")
                     }
                     else if(sort === "like") {
-                        playlists.sort((a, b) => parseInt(a.likes) >= parseInt(b.likes))
+                        playlists.sort((a, b) => parseInt(b.likes) - parseInt(a.likes))
                         console.log("sort by like")
                     }
                     else if(sort === "dislike") {
-                        playlists.sort((a, b) => parseInt(a.dislikes) >= parseInt(b.dislikes))
+                        playlists.sort((a, b) => parseInt(b.dislikes) - parseInt(a.dislikes))
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
@@ -532,15 +532,15 @@ getPlaylistPairsByUser = async (req, res) => {
                         console.log("sort by pub")
                     }
                     else if(sort === "listen") {
-                        playlists.sort((a, b) => parseInt(a.listens) >= parseInt(b.listens))
+                        playlists.sort((a, b) => parseInt(b.listens) - parseInt(a.listens))
                         console.log("sort by lis")
                     }
                     else if(sort === "like") {
-                        playlists.sort((a, b) => parseInt(a.likes) >= parseInt(b.likes))
+                        playlists.sort((a, b) => parseInt(b.likes) - parseInt(a.likes))
                         console.log("sort by like")
                     }
                     else if(sort === "dislike") {
-                        playlists.sort((a, b) => parseInt(a.dislikes) >= parseInt(b.dislikes))
+                        playlists.sort((a, b) => parseInt(b.dislikes) - parseInt(a.dislikes))
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {
@@ -605,15 +605,15 @@ getAllPublishedPlaylistPairs = async (req, res) => {
                         console.log("sort by pub")
                     }
                     else if(sort === "listen") {
-                        playlists.sort((a, b) => parseInt(a.listens) >= parseInt(b.listens))
+                        playlists.sort((a, b) => parseInt(b.listens) - parseInt(a.listens))
                         console.log("sort by lis")
                     }
                     else if(sort === "like") {
-                        playlists.sort((a, b) => parseInt(a.likes) >= parseInt(b.likes))
+                        playlists.sort((a, b) => parseInt(b.likes) - parseInt(a.likes))
                         console.log("sort by like")
                     }
                     else if(sort === "dislike") {
-                        playlists.sort((a, b) => parseInt(a.dislikes) >= parseInt(b.dislikes))
+                        playlists.sort((a, b) => parseInt(b.dislikes) - parseInt(a.dislikes))
                         console.log("sort by dislike")
                     }
                     else if(sort === "creation") {

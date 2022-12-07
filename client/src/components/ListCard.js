@@ -29,7 +29,37 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    const [ex, setEx] = useState(false);
     const { idNamePair } = props;
+    let upcolor = '#ADD8E6';
+    let pcolor = '#FFAE42';
+
+    if(store.currentList) {
+        if(store.currentList.name === idNamePair.name) {
+            if(idNamePair.publishDate !== "N/A") {
+                pcolor = '#1167b1';
+            }
+            else {
+                upcolor = '#1167b1';
+            }
+        }
+        else {
+            upcolor = '#ADD8E6';
+            pcolor = '#FFAE42';
+        }
+        
+        if(store.currentOpen === idNamePair.name) {}
+    }
+
+    function handleOpen() {
+        store.setOpen(idNamePair.name);
+    }
+
+    function handleClose() {
+        if(store.currentOpen === idNamePair.name) {
+            store.setClose();
+        }
+    }
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -160,9 +190,10 @@ function ListCard(props) {
             <ListItem
                 id={idNamePair._id}
                 key={idNamePair._id}
-                sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: '#ADD8E6', "&:hover":{ bgcolor: '#ADD8E6' }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
+                sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: upcolor, "&:hover":{ bgcolor: upcolor }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
                 button
                 onDoubleClick={handleToggleEdit}
+                onClick={(event) => {handleLoadList(event, idNamePair._id)} }
             >
                 <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold', width: '100%' }}>{idNamePair.name}</Box>
                 <Box sx={{ pl: 1, fontSize: 20, width: '55%'}}>By: 
@@ -179,10 +210,12 @@ function ListCard(props) {
             </ListItem>
             <Accordion   
                 id={idNamePair._id}              
-                sx={{ bgcolor: '#ADD8E6', '&:before': {display: 'none'} }} 
+                sx={{ bgcolor: upcolor, '&:before': {display: 'none'} }} 
                 elevation={0}
                 disableGutters
-                onChange={(event, expanded) => { if(expanded) {handleLoadList(event, idNamePair._id)} }}
+                expanded={store.currentOpen === idNamePair.name}
+                onClick={handleClose}
+                onChange={handleOpen}
             >
                 <AccordionSummary 
                     expandIcon={ 
@@ -224,8 +257,9 @@ function ListCard(props) {
             <ListItem
                 id={idNamePair._id}
                 key={idNamePair._id}
-                sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: '#FFAE42', "&:hover":{ bgcolor: '#FFAE42' }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
+                sx={{ height: '20%', p: 1, flexWrap: 'wrap', bgcolor: pcolor, "&:hover":{ bgcolor: pcolor }, borderTopRightRadius: '5px', borderTopLeftRadius: '5px' }}
                 button
+                onClick={(event) => {handleLoadList(event, idNamePair._id)} }
                 //onDoubleClick={handleToggleEdit}
             >
                 <Box sx={{ pr: 10, pl: 1, fontSize: 30, fontWeight: 'bold' }}>{idNamePair.name}</Box>
@@ -245,10 +279,12 @@ function ListCard(props) {
             </ListItem>
             <Accordion   
                 id={idNamePair._id}              
-                sx={{ bgcolor: '#FFAE42', '&:before': {display: 'none'} }} 
+                sx={{ bgcolor: pcolor, '&:before': {display: 'none'} }} 
                 elevation={0}
                 disableGutters
-                onChange={(event, expanded) => { if(expanded) {handleLoadList(event, idNamePair._id)} }}
+                expanded={store.currentOpen === idNamePair.name}
+                onClick={handleClose}
+                onChange={handleOpen}
             >
                 <AccordionSummary 
                     expandIcon={ 
