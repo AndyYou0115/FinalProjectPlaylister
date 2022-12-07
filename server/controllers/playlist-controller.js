@@ -271,7 +271,23 @@ updatePlaylist = async (req, res) => {
             error: 'You must provide a body to update',
         })
     }
-
+    let sendResponse = false;
+        await Playlist.findOne({ name: body.playlist.name }, (err, eplaylist) => {
+            if(eplaylist) { 
+                console.log("emaillll" + eplaylist.by)
+          
+                if(body.playlist.by === eplaylist.by) {
+                    sendResponse = true;
+                    return res.status(200).json({
+                        success: false,
+                        message: 'Playlist not updated!',
+                    })
+                }
+            }
+        })
+        if (sendResponse){
+            return;
+        }
     Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
         console.log("playlist found: " + JSON.stringify(playlist));
         if (err) {

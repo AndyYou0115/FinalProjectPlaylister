@@ -12,6 +12,7 @@ import Menu from '@mui/material/Menu';
 import YoutubePlayer from './YoutubePlayer';
 import CommentListCard from './CommentListCard';
 import AuthContext from '../auth';
+import MUINameErrorModal from './MUINameErrorModal';
 
 /*
     This React component lists all the lists in the UI.
@@ -227,6 +228,7 @@ const HomeScreen = () => {
                     {playerCommentTab}
                 </div>
             </div>
+            <MUINameErrorModal/>
         </div>
     )
 }

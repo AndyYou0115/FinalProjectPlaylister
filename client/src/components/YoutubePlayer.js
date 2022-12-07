@@ -77,7 +77,7 @@ const YoutubePlayer = () => {
     }
 
     function handleStop() {
-        eventTarget.stopVideo();
+        eventTarget.pauseVideo();
     }
 
     function handlePlay() {

@@ -44,7 +44,8 @@ const CurrentModal = {
     NONE : "NONE",
     DELETE_LIST : "DELETE_LIST",
     EDIT_SONG : "EDIT_SONG",
-    REMOVE_SONG : "REMOVE_SONG"
+    REMOVE_SONG : "REMOVE_SONG",
+    NAME_ERROR : "NAME_ERROR"
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -248,6 +249,23 @@ function GlobalStoreContextProvider(props) {
                     currentOpen: store.currentOpen
                 });
             }
+            case GlobalStoreActionType.NAME_ERROR: {
+                return setStore({
+                    currentModal : CurrentModal.NAME_ERROR,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: payload.currentSongIndex,
+                    currentSong: payload.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    searchMode: store.searchMode,
+                    currentCri: store.currentCri,
+                    sortType: store.sortType,
+                    currentOpen: store.currentOpen
+                });
+            }
             case GlobalStoreActionType.HIDE_MODALS: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
@@ -367,6 +385,9 @@ function GlobalStoreContextProvider(props) {
                             }
                         }
                         getListPairs(playlist);
+                    }
+                    else {
+                        store.showNameErrorModal();
                     }
                 }
                 updateList(playlist);
@@ -548,6 +569,12 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.EDIT_SONG,
             payload: {currentSongIndex: songIndex, currentSong: songToEdit}
+        });        
+    }
+    store.showNameErrorModal = () => {
+        storeReducer({
+            type: GlobalStoreActionType.NAME_ERROR,
+            payload: {}
         });        
     }
     store.showRemoveSongModal = (songIndex, songToRemove) => {

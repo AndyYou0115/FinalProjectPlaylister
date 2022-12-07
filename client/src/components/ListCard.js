@@ -29,7 +29,6 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const [ex, setEx] = useState(false);
     const { idNamePair } = props;
     let upcolor = '#ADD8E6';
     let pcolor = '#FFAE42';
@@ -37,10 +36,10 @@ function ListCard(props) {
     if(store.currentList) {
         if(store.currentList.name === idNamePair.name) {
             if(idNamePair.publishDate !== "N/A") {
-                pcolor = '#1167b1';
+                pcolor = 'white';
             }
             else {
-                upcolor = '#1167b1';
+                upcolor = 'white';
             }
         }
         else {
@@ -129,11 +128,29 @@ function ListCard(props) {
     //     store.loadIdNamePair();
     // }
 
-    let dislikeButton;
-    let likeButton;
+    let dislikeButton =
+    <Button 
+        aria-label="dislike"
+        id="dislike-button"
+        sx={{ color: "#000000", mr: 5 }}
+        startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
+        onClick={(event) => handleLikeDislikeListen(event, 2)}
+    >
+        {idNamePair.dislikes}
+    </Button>;
+    let likeButton =
+        <Button 
+            aria-label="like"
+            id="like-button"
+            sx={{ color: "#000000", ml: 40, mr: 5}}
+            startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
+            onClick={(event) => handleLikeDislikeListen(event, 1)}
+        >
+            {idNamePair.likes}
+        </Button>;
     let dupeButton;
     let deleteButton;
-    if(!auth.guest) {
+    if(auth.guest) {
         likeButton =
         <Button 
             aria-label="like"
@@ -141,6 +158,7 @@ function ListCard(props) {
             sx={{ color: "#000000", ml: 40, mr: 5}}
             startIcon={<ThumbUpAltOutlinedIcon style={{fontSize:'24pt'}} />}
             onClick={(event) => handleLikeDislikeListen(event, 1)}
+            disabled={true}
         >
             {idNamePair.likes}
         </Button>;
@@ -152,6 +170,7 @@ function ListCard(props) {
             sx={{ color: "#000000", mr: 5 }}
             startIcon={<ThumbDownAltOutlinedIcon style={{fontSize:'24pt'}} />}
             onClick={(event) => handleLikeDislikeListen(event, 2)}
+            disabled={true}
         >
             {idNamePair.dislikes}
         </Button>;
@@ -312,7 +331,7 @@ function ListCard(props) {
                 required
                 width='100%'
                 id={"list-" + idNamePair._id}
-                label="Playlist Name"
+                label='Search'
                 name="name"
                 autoComplete="Playlist Name"
                 className='list-card'
