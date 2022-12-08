@@ -34,7 +34,7 @@ function ListCard(props) {
     let pcolor = '#FFAE42';
 
     if(store.currentList) {
-        if(store.currentList.name === idNamePair.name) {
+        if(store.currentList._id === idNamePair._id) {
             if(idNamePair.publishDate !== "N/A") {
                 pcolor = 'white';
             }
@@ -46,8 +46,6 @@ function ListCard(props) {
             upcolor = '#ADD8E6';
             pcolor = '#FFAE42';
         }
-        
-        if(store.currentOpen === idNamePair.name) {}
     }
 
     function handleOpen() {
